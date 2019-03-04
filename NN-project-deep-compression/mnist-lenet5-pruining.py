@@ -342,8 +342,8 @@ def quantize(bits = 5,cdfs=None,mode='linear'):
 
 
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
-    print('accuracy before quantization: ', tf.reduce_mean(tmp).numpy())
-    print_zero_stat(net)
+    print('\naccuracy before quantization: ', tf.reduce_mean(tmp).numpy())
+
 
 
     # get the weights
@@ -365,14 +365,14 @@ def quantize(bits = 5,cdfs=None,mode='linear'):
     new_weight3, _ = utility.get_quantized_weight(w3, bits=bits,mode=mode,cdfs=(cdfs[4],cdfs[5]))
     new_weight4, _ = utility.get_quantized_weight(w4, bits=bits,mode=mode,cdfs=(cdfs[6],cdfs[7]))
     new_weight5, _ = utility.get_quantized_weight(w5, bits=bits,mode=mode,cdfs=(cdfs[8],cdfs[9]))
-    #new_weight6, _ = utility.get_quantized_weight(w6, bits=4) -> not enough elements
+    new_weight6, _ = utility.get_quantized_weight(w6, bits=4)
     new_weight7, _ = utility.get_quantized_weight(w7, bits=bits,mode=mode,cdfs=(cdfs[12],cdfs[13]))
     #new_weight8, _ = utility.get_quantized_weight(w8, bits=4) -> not enough elements
 
     # set the new weights
     net.conv1.set_weights([new_weight1, w2])
     net.conv2.set_weights([new_weight3, new_weight4])
-    net.dense.set_weights([new_weight5, w6])
+    net.dense.set_weights([new_weight5, new_weight6])
     net.logits.set_weights([new_weight7, w8])
 
     # print stats
@@ -382,7 +382,37 @@ def quantize(bits = 5,cdfs=None,mode='linear'):
 
     #ytest = tf.argmax(ytest, axis=1)
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
-    print('accuracy after quantization: ', tf.reduce_mean(tmp).numpy())
+    print('\naccuracy after quantization: ', tf.reduce_mean(tmp).numpy())
+
+    # get the weights
+    w1 = net.conv1.get_weights()[0]
+    w2 = net.conv1.get_weights()[1]
+
+    w3 = net.conv2.get_weights()[0]
+    w4 = net.conv2.get_weights()[1]
+
+    w5 = net.dense.get_weights()[0]
+    w6 = net.dense.get_weights()[1]
+
+    w7 = net.logits.get_weights()[0]
+    w8 = net.logits.get_weights()[1]
+
+    print('\nunique values :\n')
+    print(len(np.unique(w1)))
+    print(len(np.unique(w2)))
+    print(len(np.unique(w3)))
+    print(len(np.unique(w4)))
+    print(len(np.unique(w5)))
+    print(len(np.unique(w6)))
+    print(len(np.unique(w7)))
+    print(len(np.unique(w8)))
+
+    root = tf.train.Checkpoint(optimizer=opt,
+                               model=net,
+                               optimizer_step=tf.train.get_or_create_global_step())
+    root.save('checkpoint-lenet5-after-quantization/ckpt')
+
+
 
 
 def print_info():
@@ -448,16 +478,14 @@ def print_info():
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
 
     print('\naccuracy after pruning: ', tf.reduce_mean(tmp).numpy())
+    print('\n zero stat:')
     print_zero_stat(net)
-
 
 
     w1 = net.conv1.get_weights()[0]
     w1=w1.flatten()
     idx,=np.nonzero(w1==0)
     w1=np.delete(w1,idx,axis=0)
-
-
 
 
     w2 = net.conv1.get_weights()[1]
@@ -514,7 +542,7 @@ def print_info():
 #train_with_pruning()
 cdfs=print_info()
 
-quantize(cdfs=cdfs,mode='kmeans++')
+quantize(cdfs=cdfs,mode='linear')
 
 
 

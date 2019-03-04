@@ -258,7 +258,30 @@ def quantize(cdfs=None,bits = 5,mode='linear'):
     ypred = tf.argmax(ypred, axis=1)
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
     print('after quantization \naccuracy: ', tf.reduce_mean(tmp).numpy())
-    print_zero_stat(net)
+
+    # get the weights
+    w1 = net.layer1.get_weights()[0]
+    w2 = net.layer1.get_weights()[1]
+
+    w3 = net.layer2.get_weights()[0]
+    w4 = net.layer2.get_weights()[1]
+
+    w5 = net.out.get_weights()[0]
+    w6 = net.out.get_weights()[1]
+
+    print('unique values :\n')
+    print(len(np.unique(w1)))
+    print(len(np.unique(w2)))
+    print(len(np.unique(w3)))
+    print(len(np.unique(w4)))
+    print(len(np.unique(w5)))
+    print(len(np.unique(w6)))
+
+
+    root = tf.train.Checkpoint(optimizer=opt,
+                               model=net,
+                               optimizer_step=tf.train.get_or_create_global_step())
+    root.save('checkpoint-lenet300-after-quantization/ckpt')
 
 def print_info():
 
@@ -372,6 +395,6 @@ def print_info():
 #train_with_pruning()
 cdfs=print_info()
 
-quantize(cdfs=cdfs,mode='forgy')
+quantize(cdfs=cdfs,mode='linear')
 
 
