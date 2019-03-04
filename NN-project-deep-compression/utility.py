@@ -7,6 +7,9 @@ import struct
 from sklearn import datasets, model_selection
 from sklearn.utils import shuffle
 from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from scipy.interpolate import make_interp_spline, BSpline
+from scipy.interpolate import interp1d
 
 '''
 Data Management Functions
@@ -142,12 +145,118 @@ Quantization Functions
 '''
 
 
-def get_quantized_weight(layer_weight, bits=4):
-    min_ = layer_weight.min()
-    max_ = layer_weight.max()
-    space = np.linspace(min_, max_, num=2 ** bits)
+# mode : linear-density-forgy
+def get_quantized_weight(layer_weight, bits=4, mode='linear',cdfs=None):
+    if (mode == 'linear'):
+        min_ = layer_weight.min()
+        max_ = layer_weight.max()
+        space = np.linspace(min_, max_, num=2 ** bits)
+    elif (mode == 'density' and cdfs is not None):
+
+        tmp = np.linspace(0, 1, num=(2 ** bits) +1)
+        space=[]
+        xval=cdfs[0]
+        yval=cdfs[1]
+        j=1
+
+        for i in range(len(tmp)):
+            minval=min(yval, key=lambda x: abs(x - tmp[i]))
+            idx_val = np.argmax(yval == minval)
+            space.append(xval[idx_val])
+
+        space=np.array(space)
+    elif (mode == 'forgy' ):
+        layer_weight_flat=layer_weight.flatten()
+        space=np.random.choice(layer_weight_flat,size=2**bits)
+
+    elif (mode == 'kmeans++' ):
+        kmeans = KMeans(n_clusters=2**bits)
+        kmeans.fit(layer_weight.reshape(-1, 1))
+        ris = kmeans.cluster_centers_[kmeans.labels_].reshape(layer_weight.shape)
+        return ris, kmeans
+
+    else:
+        raise Exception(' error mode not found')
+
+    #print(layer_weight)
+    #print(space)
+    #print(cdfs)
     kmeans = KMeans(n_clusters=len(space), init=space.reshape(-1, 1), n_init=1, precompute_distances=True,
                     algorithm="full")
     kmeans.fit(layer_weight.reshape(-1, 1))
     ris = kmeans.cluster_centers_[kmeans.labels_].reshape(layer_weight.shape)
-    return ris,kmeans
+    return ris, kmeans
+
+
+'''
+Report function
+'''
+
+
+
+def show_weight_distribution(weight_matrix,name,tot_range=32,plot_std=True,plot_cdf=False):
+    plt.rcParams["figure.figsize"] = (20, 10)
+
+    tot_range=32
+    tot_counter =[]
+    weight_matrix=weight_matrix.flatten()
+    std = np.std(weight_matrix)
+    #weight_matrix.sort()
+    min_ = weight_matrix.min()
+    max_ = weight_matrix.max()
+
+    my_xticks = []
+
+    steps = np.linspace(min_, max_, num=tot_range)
+    #print(min_,max_)
+    #print(steps)
+    for i in range(tot_range-1):
+        r1 = steps[i]
+        r2 = steps[i+1]
+
+        x, = np.nonzero(  (weight_matrix<r2) & (weight_matrix>=r1)    )
+        #print(x.shape)
+        tot_counter.append(len(x))
+        my_xticks.append(str(round(r1,2))+','+str(round(r2,2)))
+
+    x=steps[:-1]
+    tot_counter=np.array(tot_counter)/(np.sum(tot_counter))
+
+
+    plt.xticks(x, my_xticks,rotation=90)
+    if (plot_std):
+        plt.vlines(x=std, ymin=0, ymax=max(tot_counter), linewidth=2, color='r')
+        plt.vlines(x=-std, ymin=0, ymax=max(tot_counter), linewidth=2, color='r')
+
+    xnew = np.linspace(min(x), max(x), 300)
+    spl = make_interp_spline(x, tot_counter, k=3)
+    #spl = interp1d(x, tot_counter, 'linear')
+    power_smooth = spl(xnew)
+    plt.plot(xnew, power_smooth)
+    plt.savefig(name)
+    plt.close()
+
+    if (plot_cdf):
+        cdf = []
+        for i in range(len(tot_counter)):
+            if (i==0):
+                cdf.append(tot_counter[i])
+            else:
+                cdf.append(tot_counter[i]+cdf[i-1])
+        cdf=np.array(cdf)
+
+        cdf=cdf/cdf[-1]
+        plt.xticks(x, my_xticks, rotation=90)
+
+        xnew = np.linspace(min(x), max(x), 300)
+        #spl = make_interp_spline(x, cdf, k=3)
+        spl = interp1d(x, cdf, 'linear')
+        power_smooth = spl(xnew)
+        plt.plot(xnew, power_smooth)
+        plt.savefig(name+'-cdf.png')
+        plt.close()
+        return xnew,power_smooth
+
+
+
+

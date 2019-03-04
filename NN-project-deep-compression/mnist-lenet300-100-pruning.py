@@ -11,6 +11,12 @@ layer2_size = 100
 input_size = 28 * 28
 output_size = 10  # 1 hot encoder
 
+
+normal_train=10
+prune_train=10
+semi_prune_train=1
+total_train_epoch = normal_train+prune_train+semi_prune_train
+
 ''' Model '''
 
 
@@ -30,7 +36,14 @@ class LeNet300(tf.keras.Model):
 def loss(net, x, y):
     ypred = net(x)
     l = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=ypred))
-    return l
+    # Loss function with L2 Regularization with beta=0.01
+    beta=0.01
+    w1=net.layer1.get_weights()[0]
+    w2 = net.layer2.get_weights()[0]
+    w3 = net.out.get_weights()[0]
+    regularizers = tf.nn.l2_loss(w1) + tf.nn.l2_loss(w2)+ tf.nn.l2_loss(w3)
+    loss = tf.reduce_mean(l + beta * regularizers)
+    return loss
 
 
 def print_zero_stat(net):
@@ -49,29 +62,32 @@ def print_zero_stat(net):
 
 
 def train_with_pruning():
-    step = 0
 
     utility.download_mnist(mnist_folder)
 
     [(xtrain, ytrain), (xval, yval), (xtest, ytest)] = utility.read_mnist(mnist_folder, flatten=True, num_train=-1)
+    ytest = tf.argmax(ytest, axis=1)
+
 
     net = LeNet300()
 
     loss_grad = tfe.implicit_value_and_gradients(loss)
     opt = tf.train.AdamOptimizer(0.001)
 
+    '''
     root = tf.train.Checkpoint(optimizer=opt,
                                model=net,
                                optimizer_step=tf.train.get_or_create_global_step())
     root.restore(tf.train.latest_checkpoint('checkpoint-lenet300'))
+    '''
 
     train_data = tf.data.Dataset.from_tensor_slices((xtrain, ytrain)).shuffle(1000).batch(32, drop_remainder=True)
 
-    for i in range(55):
+    for i in range(total_train_epoch):
 
         # semi prune : the previous zeros are left but no zeros will be added
         total_loss = 0
-        if (i >= 50):
+        if (i >=normal_train+prune_train):
             for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
                 current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
                 total_loss += current_loss.numpy()
@@ -103,7 +119,7 @@ def train_with_pruning():
                 net.out.set_weights([w5, w6])
 
         # prune
-        if (i >= 10 and i < 50):
+        if (i >= normal_train and i < normal_train+prune_train):
             for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
                 # 1) get weight
                 w1 = net.layer1.get_weights()[0]
@@ -114,12 +130,12 @@ def train_with_pruning():
                 w6 = net.out.get_weights()[1]
 
                 # 2) side effect on the weights under threshold values and get pruned indexes
-                zero_idx1 = utility.prune_weigth(w1, std_smooth=False)
-                zero_idx2 = utility.prune_weigth(w2, std_smooth=False)
-                zero_idx3 = utility.prune_weigth(w3, std_smooth=False)
-                zero_idx4 = utility.prune_weigth(w4, std_smooth=False)
-                zero_idx5 = utility.prune_weigth(w5, std_smooth=False)
-                zero_idx6 = utility.prune_weigth(w6, std_smooth=False)
+                zero_idx1 = utility.prune_weigth(w1, threshold=1)
+                zero_idx2 = utility.prune_weigth(w2, threshold=0.1)
+                zero_idx3 = utility.prune_weigth(w3, threshold=1)
+                zero_idx4 = utility.prune_weigth(w4, threshold=0.1)
+                zero_idx5 = utility.prune_weigth(w5, threshold=0.5)
+                zero_idx6 = utility.prune_weigth(w6, threshold=0)
 
                 # 3) set the neural network pruned weights
                 net.layer1.set_weights([w1, w2])
@@ -150,44 +166,41 @@ def train_with_pruning():
                 net.layer2.set_weights([w3, w4])
                 net.out.set_weights([w5, w6])
         # not prune
-        if (i < 10):
+        if (i < normal_train):
             for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
                 current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
                 total_loss += current_loss.numpy()
                 opt.apply_gradients(grads)
 
-        if (i % 2 == 0 or i >= 8 or True):
+        if (True):
             print('\n--------- epoch: ', i, ' --------------')
             print_zero_stat(net)
-            # ypred = net(tf.constant(Xtest))
-            # ypred = tf.argmax(ypred, axis=1)
-            # tmp = tf.cast(tf.equal(ypred, tf.constant(ytest.astype(np.int64))), tf.float32)
-            # print('accuracy: ',tf.reduce_mean(tmp).numpy())
             print('total loss in this epoch: ', total_loss)
-            # print_zero_stat(net)
+
+            ypred = tf.nn.softmax(net(tf.constant(xtest)))
+            ypred = tf.argmax(ypred, axis=1)
+
+
+            tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
+            print('\naccuracy: ', tf.reduce_mean(tmp).numpy())
+
             print('-------------------------------------')
 
-            # root = tf.train.Checkpoint(optimizer=opt,
-            #                           model=net,
-            #                           optimizer_step=tf.train.get_or_create_global_step())
-            # root.save('checkpoint-lenet300/ckpt')
-            # root.restore(tf.train.latest_checkpoint('checkpoint-lenet300'))
+            if (i == normal_train-1):
+                root = tf.train.Checkpoint(optimizer=opt,
+                                           model=net,
+                                           optimizer_step=tf.train.get_or_create_global_step())
+                root.save('checkpoint-lenet300-before-pruning/ckpt')
+                root.restore(tf.train.latest_checkpoint('checkpoint-lenet300-before-pruning'))
 
-            # step += 1
+            if (i == total_train_epoch-1):
+                root = tf.train.Checkpoint(optimizer=opt,
+                                           model=net,
+                                           optimizer_step=tf.train.get_or_create_global_step())
+                root.save('checkpoint-lenet300-after-pruning/ckpt')
 
-        # saver = tfe.Saver(net.variables)
-        # saver.save('checkpoints/checkpoint.ckpt', global_step=step)
-        # checkpoint_path = tf.train.latest_checkpoint('checkpoints')
-        # saver.restore(checkpoint_path)
-        # step+=1
 
-    ypred = tf.nn.softmax(net(tf.constant(xtest)))
-    ypred = tf.argmax(ypred, axis=1)
 
-    ytest = tf.argmax(ytest, axis=1)
-    tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
-    print('accuracy: ', tf.reduce_mean(tmp).numpy())
-    print_zero_stat(net)
 
     return net
 
@@ -196,7 +209,7 @@ def train_with_pruning():
 
 
 # assume there is a checkpoint with the trained and pruned model : before  train_with_pruning has been called
-def quantize(bits = 5):
+def quantize(cdfs=None,bits = 5,mode='linear'):
 
     # get the dataset
     [(xtrain, ytrain), (xval, yval), (xtest, ytest)] = utility.read_mnist(mnist_folder, flatten=True, num_train=-1)
@@ -207,7 +220,7 @@ def quantize(bits = 5):
     root = tf.train.Checkpoint(optimizer=opt,
                                model=net,
                                optimizer_step=tf.train.get_or_create_global_step())
-    root.restore(tf.train.latest_checkpoint('checkpoint-lenet300'))
+    root.restore(tf.train.latest_checkpoint('checkpoint-lenet300-after-pruning'))
 
     ypred = tf.nn.softmax(net(tf.constant(xtest)))
     ypred = tf.argmax(ypred, axis=1)
@@ -228,11 +241,11 @@ def quantize(bits = 5):
     w6 = net.out.get_weights()[1]
 
     # get the quantized weights
-    new_weight1,_ = utility.get_quantized_weight(w1, bits=4)
-    new_weight2, _ = utility.get_quantized_weight(w2, bits=4)
-    new_weight3, _ = utility.get_quantized_weight(w3, bits=4)
-    new_weight4, _ = utility.get_quantized_weight(w4, bits=4)
-    new_weight5, _ = utility.get_quantized_weight(w5, bits=4)
+    new_weight1,_ = utility.get_quantized_weight(w1, bits=bits,mode=mode,cdfs=(cdfs[0],cdfs[1]))
+    new_weight2, _ = utility.get_quantized_weight(w2, bits=bits,mode=mode,cdfs=(cdfs[2],cdfs[3]))
+    new_weight3, _ = utility.get_quantized_weight(w3, bits=bits,mode=mode,cdfs=(cdfs[4],cdfs[5]))
+    new_weight4, _ = utility.get_quantized_weight(w4, bits=bits,mode=mode,cdfs=(cdfs[6],cdfs[7]))
+    new_weight5, _ = utility.get_quantized_weight(w5, bits=bits,mode=mode,cdfs=(cdfs[8],cdfs[9]))
     #new_weight6, _ = utility.get_quantized_weight(w6, bits=4) -> not enough elements
 
     # set the new weights
@@ -247,8 +260,118 @@ def quantize(bits = 5):
     print('after quantization \naccuracy: ', tf.reduce_mean(tmp).numpy())
     print_zero_stat(net)
 
+def print_info():
 
 
-quantize()
+    # before pruning
 
-# net=train_with_pruning()
+    [(xtrain, ytrain), (xval, yval), (xtest, ytest)] = utility.read_mnist(mnist_folder, flatten=True, num_train=-1)
+    ytest = tf.argmax(ytest, axis=1)
+
+
+    # get the  NN before prune
+    net = LeNet300()
+    opt = tf.train.AdamOptimizer(0.001)
+    root = tf.train.Checkpoint(optimizer=opt,
+                               model=net,
+                               optimizer_step=tf.train.get_or_create_global_step())
+    root.restore(tf.train.latest_checkpoint('checkpoint-lenet300-before-pruning'))
+
+    #DUMMY VARIABLE INITIALIZATION : OTHERWISE THE WEIGHTS ARE NOT RESTORED
+    ypred = tf.nn.softmax(net(tf.constant(xtest)))
+    ypred = tf.argmax(ypred, axis=1)
+
+
+    tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
+    print('\naccuracy: ', tf.reduce_mean(tmp).numpy())
+
+
+
+    w1 = net.layer1.get_weights()[0]
+    w2 = net.layer1.get_weights()[1]
+    w3 = net.layer2.get_weights()[0]
+    w4 = net.layer2.get_weights()[1]
+    w5 = net.out.get_weights()[0]
+    w6 = net.out.get_weights()[1]
+
+    utility.show_weight_distribution(w1,'lenet300_report/layer1-lenete300-weights.png')
+    utility.show_weight_distribution(w2, 'lenet300_report/layer1-lenete300-bias.png')
+    utility.show_weight_distribution(w3, 'lenet300_report/layer2-lenete300-weights.png')
+    utility.show_weight_distribution(w4, 'lenet300_report/layer2-lenete300-bias.png')
+    utility.show_weight_distribution(w5, 'lenet300_report/out-lenete300-weights.png')
+    utility.show_weight_distribution(w6, 'lenet300_report/out-lenete300-bias.png')
+
+    # after pruning
+
+    # get the  NN before prune
+    net = LeNet300()
+    opt = tf.train.AdamOptimizer(0.001)
+    root = tf.train.Checkpoint(optimizer=opt,
+                               model=net,
+                               optimizer_step=tf.train.get_or_create_global_step())
+    root.restore(tf.train.latest_checkpoint('checkpoint-lenet300-after-pruning'))
+
+    #DUMMY VARIABLE INITIALIZATION : OTHERWISE THE WEIGHTS ARE NOT RESTORED
+    ypred = tf.nn.softmax(net(tf.constant(xtest)))
+    ypred = tf.argmax(ypred, axis=1)
+
+    tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
+
+    print('\naccuracy after pruning: ', tf.reduce_mean(tmp).numpy())
+    print_zero_stat(net)
+
+
+
+    w1 = net.layer1.get_weights()[0]
+    w1=w1.flatten()
+    idx,=np.nonzero(w1==0)
+    w1=np.delete(w1,idx,axis=0)
+
+
+
+
+    w2 = net.layer1.get_weights()[1]
+    w2=w2.flatten()
+    idx,=np.nonzero(w2==0)
+    w2=np.delete(w2,idx,axis=0)
+
+
+    w3 = net.layer2.get_weights()[0]
+    w3=w3.flatten()
+    idx,=np.nonzero(w3==0)
+    w3=np.delete(w3,idx,axis=0)
+
+
+    w4 = net.layer2.get_weights()[1]
+    w4=w4.flatten()
+    idx,=np.nonzero(w4==0)
+    w4=np.delete(w4,idx,axis=0)
+
+
+    w5 = net.out.get_weights()[0]
+    w5=w5.flatten()
+    idx,=np.nonzero(w5==0)
+    w5=np.delete(w5,idx,axis=0)
+
+
+    w6 = net.out.get_weights()[1]
+    w6=w6.flatten()
+    idx,=np.nonzero(w6==0)
+    w6=np.delete(w6,idx,axis=0)
+
+    w1,w1_cdf=utility.show_weight_distribution(w1,'lenet300_report/layer1-lenete300-weights-after_pruning.png',plot_std=False,plot_cdf=True)
+    w2, w2_cdf =utility.show_weight_distribution(w2, 'lenet300_report/layer1-lenete300-bias-after_pruning.png',plot_std=False,plot_cdf=True)
+    w3, w3_cdf =utility.show_weight_distribution(w3, 'lenet300_report/layer2-lenete300-weights-after_pruning.png',plot_std=False,plot_cdf=True)
+    w4, w4_cdf =utility.show_weight_distribution(w4, 'lenet300_report/layer2-lenete300-bias-after_pruning.png',plot_std=False,plot_cdf=True)
+    w5, w5_cdf =utility.show_weight_distribution(w5, 'lenet300_report/out-lenete300-weights-after_pruning.png',plot_std=False,plot_cdf=True)
+    w6, w6_cdf =utility.show_weight_distribution(w6, 'lenet300_report/out-lenete300-bias-after_pruning.png',plot_std=False,plot_cdf=True)
+
+    return (w1,w1_cdf,w2,w2_cdf,w3,w3_cdf,w4,w4_cdf,w5,w5_cdf,w6,w6_cdf)
+
+
+#train_with_pruning()
+cdfs=print_info()
+
+quantize(cdfs=cdfs,mode='forgy')
+
+
