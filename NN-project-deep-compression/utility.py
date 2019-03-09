@@ -5,10 +5,8 @@ import urllib
 import numpy as np
 import struct
 from sklearn import datasets, model_selection
-from sklearn.utils import shuffle
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-from scipy.interpolate import make_interp_spline, BSpline
 from scipy.interpolate import interp1d
 
 '''
@@ -132,6 +130,30 @@ the pruning threshold is chosen as a quality parameter multiplied by the standar
 
 
 def prune_weigth(original_weigth, threshold=0.25, std_smooth=True):
+
+    """It prunes the weights
+
+
+    Parameters
+    ----------
+    original_weigth : matrix of doubles
+        The matrix of the weights of a single layer to be pruned.
+    threshold : double
+        The threshold value to prune the weights whose absolute value is lower
+        This value is  multiplied by the standard deviation of original_weigth if std_smooth is true
+    std_smooth : boolean
+        If std_smooth is true, the threshold is  multiplied by the standard deviation of original_weigth
+
+
+    Returns
+    -------
+    list
+        the indexes of the pruned weights
+
+    It also prune the values of the input parameter ( original_weigth) under the threshold
+
+    """
+
     if (std_smooth):
         threshold = np.std(original_weigth) * threshold
 
@@ -145,8 +167,42 @@ Quantization Functions
 '''
 
 
-# mode : linear-density-forgy
+# mode : linear-density-forgy-kmeans++
 def get_quantized_weight(layer_weight, bits=4, mode='linear',cdfs=None):
+
+    """Replaces the neural network weights in input, with the centroids computed with k-means.
+
+    Parameters
+    ----------
+    layer_weight : matrix of doubles
+        The matrix of the weights.
+    bits : integer
+        The number of bits to use : with n bits, the value of k in the k-means is 2^n
+    mode: string
+        The tequique to initialize the centroids of k-means : {linear,density,forgy,kmeans++}
+    cdfs: list with two elements
+        The first element is the x-values of the cdf and the second one is the y-values = cdf of the weights
+
+    Returns
+    -------
+    matrix of doubles
+        The new matrix of weights with the cenotroids obtained from the k-means.
+    sklearn-model
+        The k-means fitted model
+
+
+    Raises
+    ------
+    Exception(' error mode not found')
+        if mode is not in {linear,density,forgy,kmeans++}
+
+
+    """
+
+    if (np.prod(layer_weight.shape) <(2**bits)+1):
+        print('not enough bits:',np.prod(layer_weight.shape),' vs ',2**bits)
+        return layer_weight,None
+
     if (mode == 'linear'):
         min_ = layer_weight.min()
         max_ = layer_weight.max()
@@ -178,9 +234,6 @@ def get_quantized_weight(layer_weight, bits=4, mode='linear',cdfs=None):
     else:
         raise Exception(' error mode not found')
 
-    #print(layer_weight)
-    #print(space)
-    #print(cdfs)
     kmeans = KMeans(n_clusters=len(space), init=space.reshape(-1, 1), n_init=1, precompute_distances=True,
                     algorithm="full")
     kmeans.fit(layer_weight.reshape(-1, 1))
@@ -194,28 +247,52 @@ Report function
 
 
 
-def show_weight_distribution(weight_matrix,name,tot_range=32,plot_std=True,plot_cdf=False):
+def show_weight_distribution(weight_matrix,name,plot_std=True,plot_cdf=False):
+
+    """Show the weigths distribution of the weight matrix passed as input.
+
+
+    Parameters
+    ----------
+    weight_matrix : matrix of double
+        The matrix of weights.
+    name : string
+        The name of the file to store the plot of the weight distribution.
+    plot_std : bool
+       If True plot also the values of the standard deviation
+    plot_cdf : bool
+        If True store the plot of the cumulative distribution function (cdf) of the weight_matrix.
+
+    Returns
+    -------
+
+    list :
+        list of 32 x-values from the minimum value of the weight_matrix to the maximum
+    list :
+         list of 32 y-values from 0 to 1 : the cdf in correspondence of the x-values
+
+    """
+
     plt.rcParams["figure.figsize"] = (20, 10)
 
     tot_range=32
     tot_counter =[]
     weight_matrix=weight_matrix.flatten()
     std = np.std(weight_matrix)
-    #weight_matrix.sort()
+
     min_ = weight_matrix.min()
     max_ = weight_matrix.max()
 
     my_xticks = []
 
     steps = np.linspace(min_, max_, num=tot_range)
-    #print(min_,max_)
-    #print(steps)
+
     for i in range(tot_range-1):
         r1 = steps[i]
         r2 = steps[i+1]
 
         x, = np.nonzero(  (weight_matrix<r2) & (weight_matrix>=r1)    )
-        #print(x.shape)
+
         tot_counter.append(len(x))
         my_xticks.append(str(round(r1,2))+','+str(round(r2,2)))
 
@@ -229,8 +306,8 @@ def show_weight_distribution(weight_matrix,name,tot_range=32,plot_std=True,plot_
         plt.vlines(x=-std, ymin=0, ymax=max(tot_counter), linewidth=2, color='r')
 
     xnew = np.linspace(min(x), max(x), 300)
-    spl = make_interp_spline(x, tot_counter, k=3)
-    #spl = interp1d(x, tot_counter, 'linear')
+
+    spl = interp1d(x, tot_counter, 'linear')
     power_smooth = spl(xnew)
     plt.plot(xnew, power_smooth)
     plt.savefig(name)
@@ -249,7 +326,7 @@ def show_weight_distribution(weight_matrix,name,tot_range=32,plot_std=True,plot_
         plt.xticks(x, my_xticks, rotation=90)
 
         xnew = np.linspace(min(x), max(x), 300)
-        #spl = make_interp_spline(x, cdf, k=3)
+
         spl = interp1d(x, cdf, 'linear')
         power_smooth = spl(xnew)
         plt.plot(xnew, power_smooth)

@@ -1,6 +1,0 @@
-test perfetti : std smoothing threshold 1 solo strati densi
-test perfetti : no std smoothing threshold 0.25 solo strati densi
-
-da fare : std smoothing threshold 1 solo strati densi + conv con threshold bassa
-
-chiedere scelta della threshold + kmeans

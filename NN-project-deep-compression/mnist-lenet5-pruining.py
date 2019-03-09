@@ -2,7 +2,19 @@ import tensorflow.contrib.eager as tfe
 import tensorflow as tf
 import numpy as np
 import utility
+import matplotlib.pyplot as plt
 tf.enable_eager_execution()
+
+
+def reset_seed():
+    np.random.seed(0)
+    session_conf = tf.ConfigProto(intra_op_parallelism_threads=1,
+                                  inter_op_parallelism_threads=1)
+    from keras import backend as K
+    tf.set_random_seed(0)
+    sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+    K.set_session(sess)
+reset_seed()
 mnist_folder = 'data/mnist'
 
 input_width=28
@@ -14,14 +26,13 @@ dense_size = 256
 output_size=10
 
 
-normal_train=5
-prune_train=20
-semi_prune_train=1
-total_train_epoch = normal_train+prune_train+semi_prune_train
 
 
-''' Model '''
+
+
 class LeNet5(tf.keras.Model):
+    """LeNet5 model
+    """
 
     def __init__(self):
         super(LeNet5, self).__init__()
@@ -50,8 +61,27 @@ class LeNet5(tf.keras.Model):
         x = self.dropout(x, training=training)
         return self.logits(x)
 
-# Define the loss function
+
 def loss(net, x, y):
+
+
+    """Loss function : softmax-cross-entropy with L2 regularization.
+
+    Parameters
+    ----------
+    net : LeNet5
+        The nerual network model.
+    x : Tensor
+        Value to predict the output.
+    y: Tensor
+        Correct prediction of x
+
+    Returns
+    -------
+    double
+        the average error
+    """
+
     ypred = net(x)
     beta=0.01
     w1=net.conv1.get_weights()[0]
@@ -63,7 +93,23 @@ def loss(net, x, y):
     loss_fin = tf.reduce_mean(l + beta * regularizers)
     return loss_fin
 
+
 def print_zero_stat(net):
+
+    """Prints the number of zeros in the neural network
+
+    Parameters
+    ----------
+    net : LeNet300
+        The nerual network model.
+
+    Returns
+    -------
+    void
+        print the number of zeros in each layer of the input neural network
+        with respect the total weights in that layer
+    """
+
     [l1,l1_b] = net.conv1.get_weights()
     [l2 , l2_b]= net.conv2.get_weights()
     [d, d_b] = net.dense.get_weights()
@@ -79,19 +125,91 @@ def print_zero_stat(net):
     print('Logits bias zeros :',np.count_nonzero(l_b == 0),' on ',l_b.shape[0])
 
 
-''' Train + Pruning'''
-def train_with_pruning():
-    step = 0
+
+def train_with_pruning(thresholds,std_smooth,normal_train,prune_train,semi_prune_train):
+    """It sequentially  performs the normal train, prune train, semi-prune->( normal train without the pruned weights ).
+
+
+       Parameters
+       ----------
+       thresholds : list
+           list of the thresholds to use for every layer of the neural network.
+       std_smooth : boolean
+           if True each threshold is multiplied by the standard deviation of the respective layer of the neural network.
+       normal_train : integer
+           number of epochs to normally train the neural network
+       prune_train : integer
+           number of epochs to iteratively prune the neural network
+       semi_prune_train : integer
+           number of epochs to semi-prune the neural network (normal train without the pruned weights)
+
+       How it works
+       -------
+
+       Download (only the first time) and splits the MNIST dataset,
+       instantiate the LeNet300 neural network and its parameters.
+
+       If the normal_train parameter is zero, it is assumed that the model has been previously normally trained
+       and stored in the folder /checkpoint-lenet300-before-pruning
+
+       The training starts and at the end of each epoch, it print the actual accuracy and the number of zeros in the nerual network
+
+       After the last epoch of the normal_train phase, the model is stored in the folder /checkpoint-lenet300-before-pruning
+
+       After the last epoch of the normal_train+prune_train+semi_prune phase,
+       the model is stored in the folder /checkpoint-lenet300-after-pruning
+
+       The logic of the prune_train phase is the following :
+           1) get the matrix of weights of each layers of the neural network
+           2) prune singularly each layer from the bias (side effect of the matrix)
+               and get the indexes of the pruned matrix with the pruned weights
+           3) set the new pruned weights in the neural network
+           4) compute and apply the gradient : the pruned weights now will probably change the value so they will not be zero anymore
+               but I have stored in step 2) the indexes of the pruned weights
+           5) use the indexes of the pruned weights stored in step 2) to set to zero the current weights of the model
+
+       The logic of the semi_prune phase is the following :
+           1) use the indexes of the pruned weights previously stored during the last phase of the prune_train
+           2) compute-apply gradients and set to zero the pruned weights using the indexes stored instep 1)
+
+
+       Returns
+       -------
+
+       LeNet5
+           the trained-pruned model
+       list
+           the accuracy values during the train
+
+       """
+
+    total_train_epoch = normal_train + prune_train + semi_prune_train
+    accuracy_values = []
+
     utility.download_mnist(mnist_folder)
     [(xtrain, ytrain), (xval, yval), (xtest, ytest)] = utility.read_mnist(mnist_folder, flatten=True,num_train=-1)
     net = LeNet5()
     loss_grad = tfe.implicit_value_and_gradients(loss)
     opt = tf.train.AdamOptimizer(0.001)
 
-    train_data = tf.data.Dataset.from_tensor_slices((xtrain, ytrain)).shuffle(1000).batch(32, drop_remainder=True)
+    train_data = tf.data.Dataset.from_tensor_slices((xtrain, ytrain)).shuffle(1000).batch(512, drop_remainder=True)
 
     xtest = tf.reshape(xtest, shape=[-1, input_width, input_height, 1])
     ytest = tf.argmax(ytest, axis=1)
+
+    if (normal_train == 0):
+
+        root = tf.train.Checkpoint(optimizer=opt,
+                                   model=net,
+                                   optimizer_step=tf.train.get_or_create_global_step())
+        root.restore(tf.train.latest_checkpoint('checkpoint-lenet5-before-pruning'))
+        ypred = tf.nn.softmax(net(tf.constant(xtest)))
+        ypred = tf.argmax(ypred, axis=1)
+
+        tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
+        acc=tf.reduce_mean(tmp).numpy()
+        print('\naccuracy before pruning : ', acc)
+
 
 
     for i in range(total_train_epoch ):
@@ -154,10 +272,10 @@ def train_with_pruning():
 
                     # 2) side effect on the weights under threshold values and get pruned indexes
 
-                    zero_idx1 = utility.prune_weigth(w1,std_smooth=True,threshold=1)
-                    zero_idx2 = utility.prune_weigth(w2,std_smooth=True,threshold=0.2)
-                    zero_idx3 = utility.prune_weigth(w3,std_smooth=True,threshold=1)
-                    zero_idx4 = utility.prune_weigth(w4,std_smooth=True,threshold=0.2)
+                    zero_idx1 = utility.prune_weigth(w1,std_smooth=std_smooth,threshold=thresholds[0])
+                    zero_idx2 = utility.prune_weigth(w2,std_smooth=std_smooth,threshold=thresholds[1])
+                    zero_idx3 = utility.prune_weigth(w3,std_smooth=std_smooth,threshold=thresholds[2])
+                    zero_idx4 = utility.prune_weigth(w4,std_smooth=std_smooth,threshold=thresholds[3])
 
                     #block the zero value weight for the dense layers
                     zero_idx5 = w5==0
@@ -232,10 +350,10 @@ def train_with_pruning():
                     zero_idx2 = w2==0
                     zero_idx3 = w3==0
                     zero_idx4 = w4==0
-                    zero_idx5 = utility.prune_weigth(w5, std_smooth=True, threshold=1)
-                    zero_idx6 = utility.prune_weigth(w6, std_smooth=True, threshold=0.1)
-                    zero_idx7 = utility.prune_weigth(w7, std_smooth=True, threshold=0.5)
-                    zero_idx8 = utility.prune_weigth(w8, std_smooth=True, threshold=0)
+                    zero_idx5 = utility.prune_weigth(w5, std_smooth=std_smooth,threshold=thresholds[4])
+                    zero_idx6 = utility.prune_weigth(w6, std_smooth=std_smooth,threshold=thresholds[5])
+                    zero_idx7 = utility.prune_weigth(w7, std_smooth=std_smooth,threshold=thresholds[6])
+                    zero_idx8 = utility.prune_weigth(w8, std_smooth=std_smooth,threshold=thresholds[7])
 
                     # 3) set the neural network pruned weights
                     #net.conv1.set_weights([w1, w2])
@@ -294,7 +412,9 @@ def train_with_pruning():
             ypred = tf.nn.softmax(net(tf.constant(xtest)))
             ypred = tf.argmax(ypred, axis=1)
             tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
-            print('accuracy: ', tf.reduce_mean(tmp).numpy())
+            acc=tf.reduce_mean(tmp).numpy()
+            print('accuracy: ', acc)
+            accuracy_values.append(acc)
             print('-------------------------------------')
 
             if (i == normal_train-1):
@@ -302,7 +422,7 @@ def train_with_pruning():
                                            model=net,
                                            optimizer_step=tf.train.get_or_create_global_step())
                 root.save('checkpoint-lenet5-before-pruning/ckpt')
-                root.restore(tf.train.latest_checkpoint('checkpoint-lenet300-before-pruning'))
+
 
             if (i == total_train_epoch-1):
                 root = tf.train.Checkpoint(optimizer=opt,
@@ -313,15 +433,45 @@ def train_with_pruning():
 
 
 
-    return net
+    return net,accuracy_values
 
 
 
 ''' Quantization with kmeans '''
 
-
-# assume there is a checkpoint with the trained and pruned model : before  train_with_pruning has been called
 def quantize(bits = 5,cdfs=None,mode='linear'):
+
+    """Performs the quantization and weight sharing with kmeans.
+
+    Parameters
+    ----------
+    cdfs : tuple
+        The cumulative distribution of weights for each layer of the neural network.
+        It is required only for density mode
+    bits : integer
+        The maximum number of bits to use for storing the centroids : with n bits I can store 2^n different centroids
+    mode : string
+        The technique to initialize the centers for k-means
+
+    How it works
+    -------
+    It assumes there is a checkpoint with the pruned model in the folder : /checkpoint-lenet300-after-pruning
+        : previously train_with_pruning() needs to be called
+
+    It loads the pruned model, get the original weights, get the quantized weights calling utility.get_quantized_weight(),
+        and set the new weights.
+    Finally, it stores in the folder /checkpoint-lenet300-after-quantization the quantized model
+
+    Returns
+    -------
+    void
+
+    Raises
+    ------
+    Exception('mode not found') if the mode passed is not in  {linear,density,forge,kmeans++}
+
+    """
+
 
     # get the dataset
     [(xtrain, ytrain), (xval, yval), (xtest, ytest)] = utility.read_mnist(mnist_folder, flatten=True, num_train=-1)
@@ -361,19 +511,19 @@ def quantize(bits = 5,cdfs=None,mode='linear'):
 
     # get the quantized weights
     new_weight1,_ = utility.get_quantized_weight(w1, bits=bits,mode=mode,cdfs=(cdfs[0],cdfs[1]))
-    #new_weight2, _ = utility.get_quantized_weight(w2, bits=bits,mode=mode,cdfs=(cdfs[2],cdfs[3]))
+    new_weight2, _ = utility.get_quantized_weight(w2, bits=bits,mode=mode,cdfs=(cdfs[2],cdfs[3]))
     new_weight3, _ = utility.get_quantized_weight(w3, bits=bits,mode=mode,cdfs=(cdfs[4],cdfs[5]))
     new_weight4, _ = utility.get_quantized_weight(w4, bits=bits,mode=mode,cdfs=(cdfs[6],cdfs[7]))
     new_weight5, _ = utility.get_quantized_weight(w5, bits=bits,mode=mode,cdfs=(cdfs[8],cdfs[9]))
-    new_weight6, _ = utility.get_quantized_weight(w6, bits=4)
+    new_weight6, _ = utility.get_quantized_weight(w6, bits=bits,mode=mode,cdfs=(cdfs[10],cdfs[11]))
     new_weight7, _ = utility.get_quantized_weight(w7, bits=bits,mode=mode,cdfs=(cdfs[12],cdfs[13]))
-    #new_weight8, _ = utility.get_quantized_weight(w8, bits=4) -> not enough elements
+    new_weight8, _ = utility.get_quantized_weight(w8, bits=bits,mode=mode,cdfs=(cdfs[14],cdfs[15]))
 
     # set the new weights
-    net.conv1.set_weights([new_weight1, w2])
+    net.conv1.set_weights([new_weight1, new_weight2])
     net.conv2.set_weights([new_weight3, new_weight4])
     net.dense.set_weights([new_weight5, new_weight6])
-    net.logits.set_weights([new_weight7, w8])
+    net.logits.set_weights([new_weight7, new_weight8])
 
     # print stats
 
@@ -417,6 +567,25 @@ def quantize(bits = 5,cdfs=None,mode='linear'):
 
 def print_info():
 
+    """Compute the cumulative weight distribution of the layers of the neural network
+        and stores the images of the weight distribution in the folder /lenet300_report
+
+
+    How it works
+    -------
+    1) load the model stored in /checkpoint-lenet300-before-pruning and call utility.show_weight_distribution()
+        to store the plots of the weight of the nerual network before pruning
+    2) load the model after pruning store in /checkpoint-lenet300-after-pruning and call utility.show_weight_distribution()
+        to store the plots of the weight of the neural network after pruning and to obtain the cdf of each layer
+
+
+    Returns
+    -------
+    tuple:
+        it is a tuple where for each layer there is the x-values,and y-values for that layer
+
+    """
+
 
     # before pruning
 
@@ -439,7 +608,7 @@ def print_info():
 
 
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
-    print('\nbefore pruning accuracy: ', tf.reduce_mean(tmp).numpy())
+    #print('\nbefore pruning accuracy: ', tf.reduce_mean(tmp).numpy())
 
 
 
@@ -477,9 +646,9 @@ def print_info():
 
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
 
-    print('\naccuracy after pruning: ', tf.reduce_mean(tmp).numpy())
-    print('\n zero stat:')
-    print_zero_stat(net)
+    #print('\naccuracy after pruning: ', tf.reduce_mean(tmp).numpy())
+    #print('\n zero stat:')
+    #print_zero_stat(net)
 
 
     w1 = net.conv1.get_weights()[0]
@@ -539,12 +708,16 @@ def print_info():
     return (w1,w1_cdf,w2,w2_cdf,w3,w3_cdf,w4,w4_cdf,w5,w5_cdf,w6,w6_cdf,w7, w7_cdf,w8, w8_cdf)
 
 
-#train_with_pruning()
-cdfs=print_info()
+std_smooth=True
+thresholds=[1,0.1,1,0.1,0.5,0,0,0]
 
-quantize(cdfs=cdfs,mode='linear')
+normal_train = 1
+prune_train = 2
+semi_prune_train = 0
 
+model,acc_nomal_train=train_with_pruning(thresholds,std_smooth,normal_train,prune_train,semi_prune_train)
 
-
-
-
+cdfs = print_info()
+mode='density'
+bits=5
+quantize(cdfs=cdfs,mode=mode,bits=bits)

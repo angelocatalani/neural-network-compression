@@ -3,9 +3,73 @@
   <component name="ChangeListManager">
     <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.index" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iris_pruning.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kmeans_weight_sharing.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mnist-lenet300-100-pruning.py" beforeDir="false" afterPath="$PROJECT_DIR$/mnist-lenet300-100-pruning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mnist-lenet5-pruining.py" beforeDir="false" afterPath="$PROJECT_DIR$/mnist-lenet5-pruining.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/pruning.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/report/pruning.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/deep-compression.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/report/deep-compression.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/report.aux" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.aux" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/report.log" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/report.out" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/report.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/report.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.synctex.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/report.tex" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/lat/wss-presentation.ppt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_mnist_lenet300" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report_mnist_lenet5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utility.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,14 +78,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mnist-lenet5-pruining.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-359">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="10170">
+              <caret line="714" column="15" selection-start-line="714" selection-start-column="15" selection-end-line="714" selection-end-column="15" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
+                <element signature="e#181#488#0" />
               </folding>
             </state>
           </provider>
@@ -30,22 +95,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mnist-lenet300-100-pruning.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="20" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="570">
+              <caret line="38" column="31" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="31" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utility.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="252" column="8" selection-start-line="252" selection-start-column="8" selection-end-line="252" selection-end-column="40" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -70,7 +123,6 @@
       <find>pr</find>
       <find>std</find>
       <find>prun</find>
-      <find>prune_weigth</find>
       <find>prune</find>
       <find>zero</find>
       <find>zero_id</find>
@@ -80,6 +132,16 @@
       <find>loss</find>
       <find>spline</find>
       <find>save</find>
+      <find>util</find>
+      <find>spl</find>
+      <find>make_interp_spline</find>
+      <find>PRUNE</find>
+      <find>prune_weigth</find>
+      <find>gradient</find>
+      <find>total</find>
+      <find>root</find>
+      <find>seed</find>
+      <find>+1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -96,21 +158,22 @@
         <option value="$PROJECT_DIR$/report_mnist_lenet5" />
         <option value="$PROJECT_DIR$/quantization.py" />
         <option value="$PROJECT_DIR$/model-lenet300.py" />
+        <option value="$PROJECT_DIR$/documentation" />
         <option value="$PROJECT_DIR$/utility.py" />
         <option value="$PROJECT_DIR$/mnist-lenet300-100-pruning.py" />
         <option value="$PROJECT_DIR$/mnist-lenet5-pruining.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="334" />
-    <option name="y" value="56" />
-    <option name="width" value="1278" />
-    <option name="height" value="567" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="458" />
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="827" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -124,17 +187,12 @@
             <path>
               <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
               <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
-              <item name="checkpoint-lenet300-after-pruning" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
               <item name="checkpoint-lenet300-before-pruning" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
               <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
-              <item name="lenet5_report" type="462c0819:PsiDirectoryNode" />
+              <item name="lenet300_report" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
@@ -149,7 +207,22 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="NN-project-deep-compression" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="NN-project-deep-compression" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="checkpoint-lenet5-after-pruning" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -233,8 +306,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.mnist-lenet300-100-pruning" />
       <item itemvalue="Python.iris_pruning" />
+      <item itemvalue="Python.mnist-lenet300-100-pruning" />
       <item itemvalue="Python.mnist-lenet5-pruining" />
     </list>
     <recent_temporary>
@@ -259,68 +332,58 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="334" y="56" width="1278" height="567" extended-state="0" />
+    <frame x="458" y="23" width="1440" height="827" extended-state="1" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49907234" visible="true" weight="0.2887828" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49907234" visible="true" weight="0.25581396" />
       <window_info id="Structure" order="1" sideWeight="0.50185186" side_tool="true" weight="0.24980111" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49960223" visible="true" weight="0.13473684" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49960223" weight="0.36462584" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3994452" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32871014" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32842106" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5003978" side_tool="true" weight="0.36477116" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32871014" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.22961956" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/checkpoint-lenet300/checkpoint" />
-    <entry file="file://$PROJECT_DIR$/report_mnist_lenet300">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="17" selection-start-column="17" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model-lenet300.py" />
-    <entry file="file://$PROJECT_DIR$/iris_pruning.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quantization.py" />
-    <entry file="file://$PROJECT_DIR$/out-lenete300-bias.png" />
-    <entry file="file://$PROJECT_DIR$/out-lenete300-weights.png" />
-    <entry file="file://$PROJECT_DIR$/layer1-lenete300-weights.png" />
-    <entry file="file://$PROJECT_DIR$/layer2-lenete300-bias.png" />
     <entry file="file://$PROJECT_DIR$/layer2-lenete300-weights.png" />
     <entry file="file://$PROJECT_DIR$/layer1-lenete300-bias.png" />
-    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-weights.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-weights.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png-cdf.png">
-      <provider selected="true" editor-type-id="images" />
+    <entry file="file://$PROJECT_DIR$/report_mnist_lenet300" />
+    <entry file="file://$PROJECT_DIR$/report_mnist_lenet5" />
+    <entry file="file://$PROJECT_DIR$/iris_pruning.py" />
+    <entry file="file://$PROJECT_DIR$/documentation" />
+    <entry file="file://$PROJECT_DIR$/utility.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
+          <folding>
+            <element signature="e#332#451#0" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png-cdf.png">
@@ -329,24 +392,47 @@
     <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights.png">
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png-cdf.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png-cdf.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-weights.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png-cdf.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/out-lenete300-bias.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/report_mnist_lenet5">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="40" selection-start-line="5" selection-start-column="40" selection-end-line="5" selection-end-column="40" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png-cdf.png">
+      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet5_report/conv1-lenete5-bias.png">
       <provider selected="true" editor-type-id="images" />
@@ -360,10 +446,10 @@
     <entry file="file://$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png-cdf.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias.png">
@@ -375,25 +461,16 @@
     <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-bias.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-bias.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-bias.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png-cdf.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png">
@@ -402,38 +479,28 @@
     <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png-cdf.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-bias.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png-cdf.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-weights.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png-cdf.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png-cdf.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lenet5_report/logits-lenete5-weights.png">
+    <entry file="file://$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utility.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="252" column="8" selection-start-line="252" selection-start-column="8" selection-end-line="252" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mnist-lenet300-100-pruning.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="570">
+          <caret line="38" column="31" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="31" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
@@ -442,10 +509,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mnist-lenet5-pruining.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-359">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="10170">
+          <caret line="714" column="15" selection-start-line="714" selection-start-column="15" selection-end-line="714" selection-end-column="15" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
+            <element signature="e#181#488#0" />
           </folding>
         </state>
       </provider>
