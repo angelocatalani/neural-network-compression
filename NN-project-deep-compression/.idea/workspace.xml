@@ -1,76 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-after-pruning/ckpt-1.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet300-before-pruning/ckpt-1.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-pruning/ckpt-1.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-after-quantization/ckpt-1.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.index" beforeDir="false" afterPath="$PROJECT_DIR$/checkpoint-lenet5-before-pruning/ckpt-1.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iris_pruning.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kmeans_weight_sharing.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer1-lenete300-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/layer2-lenete300-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet300_report/out-lenete300-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-bisd-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv1-lenete5-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/conv2-lenete5-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/dense-lenete5-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-bias.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png-cdf.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights-after_pruning.png-cdf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights.png" beforeDir="false" afterPath="$PROJECT_DIR$/lenet5_report/logits-lenete5-weights.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mnist-lenet300-100-pruning.py" beforeDir="false" afterPath="$PROJECT_DIR$/mnist-lenet300-100-pruning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mnist-lenet5-pruining.py" beforeDir="false" afterPath="$PROJECT_DIR$/mnist-lenet5-pruining.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/deep-compression.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/report/deep-compression.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/report.aux" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.aux" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/report.log" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/report.out" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/report.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/report.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.synctex.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/report.tex" beforeDir="false" afterPath="$PROJECT_DIR$/report/lat/report.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/lat/wss-presentation.ppt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/report_mnist_lenet300" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/report_mnist_lenet5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility.py" beforeDir="false" afterPath="$PROJECT_DIR$/utility.py" afterDir="false" />
-    </list>
+    <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,7 +96,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="458" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
@@ -173,7 +104,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -202,6 +133,23 @@
             <path>
               <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.5 (env_tensorflow_ecg) &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.5 (env_tensorflow_ecg) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="python3.5" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.5 (env_tensorflow_ecg) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="lib-dynload" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -332,8 +280,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="458" y="23" width="1440" height="827" extended-state="1" />
-    <editor active="true" />
+    <frame x="458" y="23" width="1440" height="827" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49907234" visible="true" weight="0.25581396" />
       <window_info id="Structure" order="1" sideWeight="0.50185186" side_tool="true" weight="0.24980111" />
