@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.7.28)  8 MAR 2019 17:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.7.28)  9 MAR 2019 12:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -434,20 +434,15 @@ Package pdftex.def Info: prune-view.png used on input line 111.
 <weigth-dis.png, id=45, 1445.4pt x 722.7pt>
 File: weigth-dis.png Graphic file (type png)
  <use weigth-dis.png>
-Package pdftex.def Info: weigth-dis.png used on input line 122.
+Package pdftex.def Info: weigth-dis.png used on input line 123.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
-
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 122--123
-[][] 
- []
-
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 126.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 127.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 126.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 127.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 126.
-[1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 127.
+ [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
  <./diamondrule-eps-converted-to.pdf> <./prune-view.png> <./weigth-dis.png>]
@@ -455,100 +450,81 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 File: weights-after-pruning.png Graphic file (type png)
 
 <use weights-after-pruning.png>
-Package pdftex.def Info: weights-after-pruning.png used on input line 138.
+Package pdftex.def Info: weights-after-pruning.png used on input line 139.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
 
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 138--139
+Overfull \hbox (4.75829pt too wide) in paragraph at lines 139--140
 [][] 
  []
 
 <cdf.png, id=76, 1445.4pt x 722.7pt>
 File: cdf.png Graphic file (type png)
  <use cdf.png>
-Package pdftex.def Info: cdf.png used on input line 142.
+Package pdftex.def Info: cdf.png used on input line 143.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
 
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 142--143
+Overfull \hbox (4.75829pt too wide) in paragraph at lines 143--144
 [][] 
  []
 
-LaTeX Font Info:    Try loading font information for U+bbold on input line 149.
+LaTeX Font Info:    Try loading font information for U+bbold on input line 150.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/bbold/Ubbold.fd)
 <accuracy-soft-threshold.png, id=77, 1445.4pt x 722.7pt>
 File: accuracy-soft-threshold.png Graphic file (type png)
 
 <use accuracy-soft-threshold.png>
-Package pdftex.def Info: accuracy-soft-threshold.png used on input line 202.
+Package pdftex.def Info: accuracy-soft-threshold.png used on input line 204.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
-
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 202--203
-[][] 
- []
-
-[2 <./weights-after-pruning.png> <./cdf.png>]
-<accuracy-hard-threshold.png, id=107, 1445.4pt x 722.7pt>
+ [2 <./weights-after-pruning.png> <./cdf.png>] <accuracy-hard-threshold.png, id
+=107, 1445.4pt x 722.7pt>
 File: accuracy-hard-threshold.png Graphic file (type png)
 
 <use accuracy-hard-threshold.png>
-Package pdftex.def Info: accuracy-hard-threshold.png used on input line 236.
+Package pdftex.def Info: accuracy-hard-threshold.png used on input line 239.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
-
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 236--237
-[][] 
- []
 
 <accuracy-soft-threshold-conv.png, id=108, 1445.4pt x 722.7pt>
 File: accuracy-soft-threshold-conv.png Graphic file (type png)
 
 <use accuracy-soft-threshold-conv.png>
 Package pdftex.def Info: accuracy-soft-threshold-conv.png used on input line 27
-2.
+6.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
-
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 272--273
-[][] 
- []
 
 <accuracy-hard-threshold-conv.png, id=109, 1445.4pt x 722.7pt>
 File: accuracy-hard-threshold-conv.png Graphic file (type png)
 
 <use accuracy-hard-threshold-conv.png>
-Package pdftex.def Info: accuracy-hard-threshold-conv.png used on input line 30
-7.
+Package pdftex.def Info: accuracy-hard-threshold-conv.png used on input line 31
+2.
 (pdftex.def)             Requested size: 1011.77312pt x 505.88655pt.
-
-Overfull \hbox (4.75829pt too wide) in paragraph at lines 307--308
-[][] 
- []
-
-[3 <./accuracy-soft-threshold.png> <./accuracy-hard-threshold.png> <./accuracy-
-soft-threshold-conv.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 325.
+ [3 <./accuracy-soft-threshold.png> <./accuracy-hard-threshold.png> <./accuracy
+-soft-threshold-conv.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 330.
  [4
 
  <./accuracy-hard-threshold-conv.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 325.
-
-(./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 325.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 325.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 330.
+ (./report.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 330.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 330.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 75C22268F9B8483BB86B35DE7C425E0A;420.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 325.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 330.
  ) 
 Here is how much of TeX's memory you used:
  5870 strings out of 492995
  87983 string characters out of 6132704
- 185559 words of memory out of 5000000
+ 185560 words of memory out of 5000000
  9258 multiletter control sequences out of 15000+600000
  45245 words of font info for 91 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,9n,37p,1262b,377s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,9n,37p,1234b,377s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/bbold-type1/bbold10.pfb></usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
@@ -560,7 +536,7 @@ dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2017/texmf-dist/fonts/
 type1/urw/symbol/usyr.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/t
 imes/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri
 8a.pfb>
-Output written on report.pdf (4 pages, 400220 bytes).
+Output written on report.pdf (4 pages, 400162 bytes).
 PDF statistics:
  182 PDF objects out of 1000 (max. 8388607)
  147 compressed objects within 2 object streams

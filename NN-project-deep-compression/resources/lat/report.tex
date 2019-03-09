@@ -78,7 +78,7 @@
 %% indicate IEEE Member or Student Member in form indicated below
 \author{Angelo Catalani 1582230}
 \abstract{
-Neural Network are both computationally intensive and memory intensive, making them difficult to deploy on embedded systems with limited hardware resources.\\Compressing a neural network with pruning and quantization with no loss of accuracy is the aim of this project }
+Neural Network are both computationally intensive and memory intensive, making them difficult to deploy on embedded systems with limited hardware resources.\\Compressing a neural network with pruning and quantization with low loss of accuracy is the aim of this project }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%% START OF THE PAPER %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -117,13 +117,14 @@ It is significant to note that:
 \item retraining the pruned neural network is necessary for the accuracy since after the remotion of some connection (step 2),in general the accuracy will drop
 \item pruning works under the hypothesis that the network is over-parametrized so that it solves not only memory/complexity issues but also can reduce the risk of overfitting
 \end{enumerate}
-The regularization terms used in the loss function, tends to lower the magnitude of the weight matrices, so that more weights will be close to zero and good candidates for being pruned.\\In particular, I have chosen L2 regularization because gives better results than L1(\cite{p1}).\\Deep neural network can be affected by the vanishing gradient problem.Even if \cite{p1} does not deals directly with that problem it notes that when a neural network struggles to update its weights consistently, it will not be able to recover in terms of accuracy and the training will be ineffective after the pruning of some neurons. \\To deals with this issue, as written in  \cite{p1} I have pruned the convolutional layers and the dense layers on different iterations, so that the error caused by the pruning at each iteration is attenuated.\\In \cite{p1}, the threshold value is obtained as a quality parameter multiplied by the standard deviation of a layer's weights.\\This choice is justified by the fact that as it is the case of my experiments, the weights of a dense/convolutional layers are distributed as a gaussian of zero mean so that the weights in the range of the positive and negative standard deviation are 68\% of the total.
+The regularization terms used in the loss function, tends to lower the magnitude of the weight matrices, so that more weights will be close to zero and good candidates for being pruned.\\In particular, I have chosen L2 regularization because gives better results than L1(\cite{p1}).\\Deep neural network can be affected by the vanishing gradient problem.Even if \cite{p1} does not deals directly with that problem it notes that when a neural network struggles to update its weights consistently, it will not be able to recover from pruning of some neurons during the iterative pruning train. \\To deals with this issue, as written in  \cite{p1} I have pruned the convolutional layers and the dense layers on different iterations, so that the error caused by the pruning at each iteration is attenuated.\\In \cite{p1}, the threshold value is obtained as a quality parameter multiplied by the standard deviation of a layer's weights.\\This choice is justified by the fact that as it is the case of my experiments, the weights of a dense/convolutional layers are distributed as a gaussian of zero mean so that the weights in the range of the positive and negative standard deviation are 68\% of the total.
 \begin{figure}[H]
+	\hspace*{-1cm}
 	\includegraphics[width=90mm,scale=0.7]{weigth-dis}
 	\caption{Weight distribution  (with +/- std in red) before pruning for a dense layer of Lenet300-100 }
 \end{figure}
 \section{Quantization And Weight Sharing}
-This section is described in \cite{p2}.\\After the network has been pruned, to the network is further compressed by reducing the number of bits to represent a a single weights.\\In particular I have applied k-means (with 1 dimensional data) to the weights of each layer so that the new weights of the layer are the centroids to which the original weights belong to.\\Crucial to this step is the choice of k and the centroid initialization.\\The choice of k is a consequence of the number of bits used in this step : if we want to compress the layers weights to n bits, we can use up to $2^{n}$ centroids.\\The tradeoff between accuracy-compression is due to the number of bits used : the more the bits, the more the accuracy, the more the space required.\\The paper describes 3 different technique regarding the centroid initialization:
+This section is described in \cite{p2}.\\After the network has been pruned, the network is further compressed by reducing the number of bits to represent the single weights.\\In particular I have applied k-means (with 1 dimensional data) to the weights of each layer so that the new weights of the layer are the centroids to which the original weights belong to.\\Crucial to this step is the choice of k and the centroid initialization.\\The choice of k is a consequence of the number of bits used in this step : if we want to compress the layers weights to n bits, we can use up to $2^{n}$ centroids.\\The tradeoff between accuracy-compression is due to the number of bits used : the more the bits, the more the accuracy, the more the space required.\\The paper describes 3 different technique regarding the centroid initialization:
 \begin{enumerate}
 \item forgy : random choice among the weights 
 \item density-based : consider the cumulative distribution of weights (cdf) and takes the x-values at different fixed y-values (cdf)
@@ -151,11 +152,11 @@ At the end of this process, each layer will have at most $2^{n}$ different value
 I have not implemented the fine tuning of the centroids because:
 \begin{enumerate}
 \item the loss of accuracy after quantization is almost inexistent with respect to the pruned model
-\item the latency is eccessive : for each single batch in every epoch, I should have scanned all the gradients (more than 1 minutes for a single batch on my pc) 
+\item the latency is eccessive : for each single batch in every epoch, I should have scanned all the gradients
 \end{enumerate}
 
 \section{Experiment}
-I have run my experiment on the MNIST classification problem, with the neural networks named : LeNet300-100 and LeNet5.\\Each element in the dataset is an image of size : 28 x 28 and the output class is a vector of 10 values obtained using the one hot encoding.\\LeNet300-100 has in total:
+I have run my experiment on the MNIST classification problem using the Colaboratory , with the neural networks named : LeNet300-100 and LeNet5.\\Each element in the dataset is an image of size : 28 x 28 and the output class is a vector of 10 values obtained using the one hot encoding.\\LeNet300-100 has in total:
 \begin{enumerate}
 \item  a fully connected layer of size 300 : $28\cdot 28 \cdot 300 = 235200$ weights plus $300$ bias weights
 \item  a fully connected layer of size 100 : $300\cdot 100 = 30000$ weights plus $100$ bias weights
@@ -199,6 +200,7 @@ Density       & 97.93\% & 98.18\% & 98.20\% \\ \hline
 Kmeans++     & 97.70\% & 98.18\% & 98.21\% \\ \hline
 \end{tabular}
 \end{table}\begin{figure}[H]
+	\hspace*{-1cm}   
 	\includegraphics[width=90mm,scale=0.7]{accuracy-soft-threshold}
 	\caption{Accuracy during the training for test 1 : when pruning starts at epoch 200 the accuracy slightly drops}
 \end{figure}
@@ -233,6 +235,7 @@ Dense        & 60.80\% & 95.63\% & 96.08\% \\ \hline
 Kmeans++     & 31.10\% & 95.83\% & 96.13\% \\ \hline
 \end{tabular}
 \end{table}\begin{figure}[H]
+	\hspace*{-1cm}
 	\includegraphics[width=90mm,scale=0.7]{accuracy-hard-threshold}
 	\caption{Accuracy during the training for test 2}
 \end{figure}
@@ -269,6 +272,7 @@ Density       & 99.16\% & 99.27\% & 99.28\% \\ \hline
 Kmeans++     & 99.14\% & 99.28\% & 98.28\% \\ \hline
 \end{tabular}
 \end{table}\begin{figure}[H]
+	\hspace*{-1cm}
 	\includegraphics[width=90mm,scale=0.7]{accuracy-soft-threshold-conv}
 	\caption{Accuracy during the training for test 3}
 \end{figure}
@@ -304,6 +308,7 @@ Dense        & 97.57\% & 99.02\% & 99.03\% \\ \hline
 Kmeans++     & 95.01\% & 99.02\% & 90.02\% \\ \hline
 \end{tabular}
 \end{table}\begin{figure}[H]
+	\hspace*{-1cm}
 	\includegraphics[width=90mm,scale=0.7]{accuracy-hard-threshold-conv}
 	\caption{Accuracy during the training for test 4}
 \end{figure}

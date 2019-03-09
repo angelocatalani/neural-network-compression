@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="" />
+    <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lat/report.log" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lat/report.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lat/report.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lat/report.synctex.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lat/report.tex" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lat/report.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../report.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../report.pdf" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mnist-lenet5-pruining.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10170">
-              <caret line="714" column="15" selection-start-line="714" selection-start-column="15" selection-end-line="714" selection-end-column="15" />
+            <state relative-caret-position="285">
+              <caret line="55" column="37" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="37" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
                 <element signature="e#181#488#0" />
@@ -114,21 +120,6 @@
             <path>
               <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
               <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
-              <item name="checkpoint-lenet300-before-pruning" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
-              <item name="lenet300_report" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NN-project-deep-compression" type="462c0819:PsiDirectoryNode" />
-              <item name="report" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NN-project-deep-compression" type="b2602c69:ProjectViewProjectNode" />
@@ -280,7 +271,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="458" y="23" width="1440" height="827" extended-state="0" />
+    <frame x="625" y="251" width="1440" height="827" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49907234" visible="true" weight="0.25581396" />
       <window_info id="Structure" order="1" sideWeight="0.50185186" side_tool="true" weight="0.24980111" />
@@ -456,8 +447,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mnist-lenet5-pruining.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10170">
-          <caret line="714" column="15" selection-start-line="714" selection-start-column="15" selection-end-line="714" selection-end-column="15" />
+        <state relative-caret-position="285">
+          <caret line="55" column="37" selection-start-line="55" selection-start-column="37" selection-end-line="55" selection-end-column="37" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
             <element signature="e#181#488#0" />
