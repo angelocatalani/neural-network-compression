@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lat/report.log" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lat/report.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lat/report.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lat/report.synctex.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lat/report.tex" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lat/report.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../report.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../report.pdf" afterDir="false" />
-    </list>
+    <list default="true" id="22de7d49-d0ef-4cc0-b07f-b72d43107996" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

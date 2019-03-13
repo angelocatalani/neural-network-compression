@@ -242,36 +242,36 @@ Kmeans++     & 31.10\% & 95.83\% & 96.13\% \\ \hline
 	\caption{Accuracy during the training for test 2}
 \end{figure}
 \subsection{Test 3}
-It is executed with LeNet5 with 100 epochs for normal training and 30 epochs for pruning.\\It is important to stress the fact that as said before, to avoid the vanishing gradient problem, first the convolutional layers are pruned and then the dense layers (the same for the following test 4).
+It is executed with LeNet5 with 70 epochs for normal training and 30 epochs for pruning.\\It is important to stress the fact that as said before, to avoid the vanishing gradient problem, first the convolutional layers are pruned and then the dense layers (the same for the following test 4).
 \begin{table}[H]
 \caption{Test 3 pruning results}
 \label{my-label}
 \begin{tabular}{|l|l|l|}
 \hline
 LAYER    & THRESHOLD & ZERO WEIGHTS     \\ \hline
-conv1      & 1         & 0 on 500 \\ \hline
-conv1 bias & 0.1       & 0 on 20        \\ \hline
-conv2      & 1         & 7826 on 25000   \\ \hline
-conv2 bias & 0.1       & 0 on 50       \\ \hline
-fc1      & 0.5       & 624960 on 627200      \\ \hline
-fc1 bias & 0         & 256 on 256          \\ \hline
-fc2 bias & 0         & 420 on 2560          \\ \hline
-fc2 bias & 0         & 0 on 10          \\ \hline
+conv1      & 1         & 360 on 500 \\ \hline
+conv1 bias & 0.1       & 8 on 20        \\ \hline
+conv2      & 1         & 187238 on 25000   \\ \hline
+conv2 bias & 0.1       & 15 on 50       \\ \hline
+fc1      & 1       & 487742 on 627200      \\ \hline
+fc1 bias & 0.1         & 116 on 256          \\ \hline
+fc2 bias & 1         & 1835 on 2560          \\ \hline
+fc2 bias & 0.1        & 5 on 10          \\ \hline
 
 \end{tabular}
 \end{table}
 
-The accuracy before pruning is : 99.24\% and after is : 99.29\%.\\This is the final accuracy after the different quantization techniques with 2,5,8 bits are applied after the pruning:
+The accuracy before pruning is : 99.28\% and after is : 99.34\%.\\This is the final accuracy after the different quantization techniques with 2,5,8 bits are applied after the pruning:
 \begin{table}[H]
 \caption{Test 3 quantization accuracy}
 \label{my-label}
 \begin{tabular}{|l|l|l|l|}
 \hline
 QUANTIZATION & 2-BITS  & 5-BITS  & 8-BITS  \\ \hline
-Linear       & 99.17\% & 98.29\% & 99.29\% \\ \hline
-Forgy        & 95.66\% & 99.30\% & 99.29\% \\ \hline
-Density       & 99.16\% & 99.27\% & 99.28\% \\ \hline
-Kmeans++     & 99.14\% & 99.28\% & 98.28\% \\ \hline
+Linear       & 99.12\% & 99.29\% & 99.30\% \\ \hline
+Forgy        & 96.43\% & 99.33\% & 99.30\% \\ \hline
+Density       & 99.19\% & 99.30\% & 99.30\% \\ \hline
+Kmeans++     & 99.08\% & 99.30\% & 99.30\% \\ \hline
 \end{tabular}
 \end{table}\begin{figure}[H]
 	\hspace*{-1cm}
@@ -290,7 +290,7 @@ conv1      & 0         & 0 on 500 \\ \hline
 conv1 bias & 0       & 0 on 20        \\ \hline
 conv2      & 0.25         & 24542 on 25000   \\ \hline
 conv2 bias & 0      & 0 on 50       \\ \hline
-fc1      & 0.5       & 620797 on 627200      \\ \hline
+fc1      & 0.25       & 620797 on 627200      \\ \hline
 fc1 bias & 0         & 0 on 256          \\ \hline
 fc2 bias & 0.1         & 982 on 2560          \\ \hline
 fc2 bias & 0         & 0 on 10          \\ \hline
