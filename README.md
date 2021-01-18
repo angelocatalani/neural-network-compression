@@ -23,7 +23,9 @@ This is why it is difficult to deploy then on embedded systems with limited hard
 
 The aim of this project is to compress a neural network with pruning and quantization without accuracy degradation.
 
-The experiments are executed on the [MNIST classification problem](https://en.wikipedia.org/wiki/MNIST_database), with the following neural networks: `LeNet300-100` and `LeNet5`.  
+The experiments are executed on the [MNIST classification problem](https://en.wikipedia.org/wiki/MNIST_database), with the following neural networks: `LeNet300-100` and `LeNet5`.
+
+[Quick presentation](https://docs.google.com/presentation/d/1zhzdDFtN-13fnuI6Ni400xstSfT1EStweuqKMQHU8R4/edit?usp=sharing).
 
 ### Compression
 ### References
