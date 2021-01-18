@@ -30,7 +30,7 @@ The experiments are executed on the [MNIST classification problem](https://en.wi
 
 - [Learning both Weights and Connections for Efficient Neural Networks - Song Han, Jeff Pool, John Tran, William J. Dally](https://arxiv.org/abs/1506.02626). 
 
-- [Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding - Song Han, Huizi Mao, John Tran, J.Dally]((https://arxiv.org/abs/1510.00149)).
+- [Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding - Song Han, Huizi Mao, John Tran, J.Dally](https://arxiv.org/abs/1510.00149).
 
 ### Contributing
 
