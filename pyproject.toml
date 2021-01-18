@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "neural-network-compression"
+description = "Neural network compression"
+version = "1.0.0"
+authors = ["angelo"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+black = "19.10b0"
+isort = "~4.3.21"
+mypy = "0.770"
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+exclude = '''
+(
+    \.idea |
+    \.DS_Store |
+    \.githooks |
+    \.vscode |
+    venv |
+    .html |
+    .json |
+    .pyc |
+    .sql
+)
+'''
