@@ -13,10 +13,8 @@ Implementation of neural network compression from [Deep Compression: Compressing
 ## Table of Contents
 
 * [Abstract](#abstract)
-* [Compression](#compression)
+* [Summary](#summary)
 * [References](#references)
-* [Contributing](#contributing)
-
 
 ### Abstract
 
@@ -27,15 +25,12 @@ The aim of this project is to compress a neural network with pruning and quantiz
 
 The experiments are executed on the [MNIST classification problem](https://en.wikipedia.org/wiki/MNIST_database), with the following neural networks: `LeNet300-100` and `LeNet5`.
 
-### Compression
+### Summary
+
+TODO
+
 ### References
 
 - [Learning both Weights and Connections for Efficient Neural Networks - Song Han, Jeff Pool, John Tran, William J. Dally](https://arxiv.org/abs/1506.02626). 
 
 - [Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding - Song Han, Huizi Mao, John Tran, J.Dally](https://arxiv.org/abs/1510.00149).
-
-### Contributing
-
-To contribute, please open a PR based on the `master` branch.
-
-We follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
