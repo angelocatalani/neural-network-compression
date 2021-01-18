@@ -18,7 +18,9 @@ Implementation of neural network compression from [Deep Compression: Compressing
 
 ### Abstract
 
-Neural Network are both computationally intensive and memory intensive, making them difficult to deploy on embedded systems with limited hardware resources.
+Neural networks are both computationally and memory intensive.
+This is why it is difficult to deploy then on embedded systems with limited hardware resources.
+
 The aim of this project is to compress a neural network with pruning and quantization without accuracy degradation.
 
 The experiments are executed on the [MNIST classification problem](https://en.wikipedia.org/wiki/MNIST_database), with the following neural networks: `LeNet300-100` and `LeNet5`.  
@@ -27,7 +29,7 @@ The experiments are executed on the [MNIST classification problem](https://en.wi
 ### References
 
 - Song Han, Jeff Pool, John Tran, William J. Dally Learning both Weights and Connections for Efficient Neural Networks. 
- 
+
 - SongHan,HuiziMao,JohnTran,J.Dally DEEP COMPRESSION:COMPRESSING DEEP NEURAL NETWORKS WITH PRUNING, TRAINED QUANTIZATION AND HUFFMAN CODING
 
 ### Contributing
