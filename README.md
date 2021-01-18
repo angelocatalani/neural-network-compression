@@ -14,6 +14,7 @@ Implementation of neural network compression from [Deep Compression: Compressing
 
 * [Abstract](#abstract)
 * [Description](#description)
+* [Usage](#usage)
 * [References](#references)
 
 ### Abstract
@@ -26,6 +27,10 @@ The aim of this project is to compress a neural network with pruning and quantiz
 The experiments are executed on the [MNIST classification problem](https://en.wikipedia.org/wiki/MNIST_database), with the following neural networks: `LeNet300-100` and `LeNet5`.
 
 ### Description
+
+TODO
+
+### Usage
 
 TODO
 
