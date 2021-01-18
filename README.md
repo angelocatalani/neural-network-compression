@@ -34,7 +34,6 @@ The experiments are executed on the [MNIST classification problem](https://en.wi
 
 ### Contributing
 
-To contribute, please open a PR based on the `staging` branch, make sure that the new code is properly tested 
-and all the steps performed in the CI pipeline are completed successfully. 
+To contribute, please open a PR based on the `master` branch.
 
 We follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
