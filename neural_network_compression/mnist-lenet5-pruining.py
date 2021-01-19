@@ -1,8 +1,6 @@
-import tensorflow.python.eager as tfe
 import tensorflow as tf
 import numpy as np
 import neural_network_compression.utility as utility
-import matplotlib.pyplot as plt
 
 def reset_seed():
     np.random.seed(0)
@@ -49,7 +47,8 @@ class LeNet5(tf.keras.Model):
         # weight: (256, 10) = 2560 + (10,)
         self.logits = tf.keras.layers.Dense(units=output_size)
 
-    def call(self, x, training=True):
+    def call(self, x, **kwargs):
+        training = kwargs.get("training",True)
         x = self.pool1(self.conv1(x))
         x = self.pool2(self.conv2(x))
         feature_dim = x.shape[1] * x.shape[2] * x.shape[3]
@@ -224,7 +223,7 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
         root = tf.train.Checkpoint(
             optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
         )
-        root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-before-pruning"))
+        root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet5-before-pruning"))
         ypred = tf.nn.softmax(LENET5(tf.constant(xtest)))
         ypred = tf.argmax(ypred, axis=1)
 
@@ -427,45 +426,47 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     LENET5.conv2.set_weights([w3, w4])
                     LENET5.dense.set_weights([w5, w6])
                     LENET5.logits.set_weights([w7, w8])
+
         # not prune
         if i < normal_train:
-            for Xtrain_t, ytrain_t in train_data:
+            normal_training(opt, train_data)
 
-                Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
-                grads = get_grad( Xtrain_t, ytrain_t)
-                #total_loss += current_loss.numpy()
-                apply_grad(opt,grads)
 
-        if True:
-            print("\n--------- epoch: ", i, " --------------")
-            print_zero_stat(LENET5)
-            print("total loss in this epoch: ", total_loss)
-            ypred = tf.nn.softmax(LENET5(tf.constant(xtest)))
-            ypred = tf.argmax(ypred, axis=1)
-            tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
-            acc = tf.reduce_mean(tmp).numpy()
-            print("accuracy: ", acc)
-            accuracy_values.append(acc)
-            print("-------------------------------------")
+        print("\n--------- epoch: ", i, " --------------")
+        print_zero_stat(LENET5)
+        print("total loss in this epoch: ", total_loss)
+        ypred = tf.nn.softmax(LENET5(tf.constant(xtest)))
+        ypred = tf.argmax(ypred, axis=1)
+        tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
+        acc = tf.reduce_mean(tmp).numpy()
+        print("accuracy: ", acc)
+        accuracy_values.append(acc)
+        print("-------------------------------------")
 
-            if i == normal_train - 1:
-                root = tf.train.Checkpoint(
-                    optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
-                )
-                root.save("checkpoint-lenet5-before-pruning/ckpt")
+        if i == normal_train - 1:
+            root = tf.train.Checkpoint(
+                optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
+            )
+            root.save("checkpoint-lenet5-before-pruning/ckpt")
 
-            if i == total_train_epoch - 1:
-                root = tf.train.Checkpoint(
-                    optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
-                )
-                root.save("checkpoint-lenet5-after-pruning/ckpt")
+        if i == total_train_epoch - 1:
+            root = tf.train.Checkpoint(
+                optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
+            )
+            root.save("checkpoint-lenet5-after-pruning/ckpt")
 
     return LENET5, accuracy_values
 
 
+def normal_training(opt, train_data):
+    for Xtrain_t, ytrain_t in train_data:
+        Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
+        grads = get_grad(Xtrain_t, ytrain_t)
+        # total_loss += current_loss.numpy()
+        apply_grad(opt, grads)
+
+
 """ Quantization with kmeans """
-
-
 def quantize(bits=5, cdfs=None, mode="linear"):
 
     """Performs the quantization and weight sharing with kmeans.
@@ -512,7 +513,7 @@ def quantize(bits=5, cdfs=None, mode="linear"):
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
-    root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-after-pruning"))
+    root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet5-after-pruning"))
 
     ypred = tf.nn.softmax(net(tf.constant(xtest)))
     ypred = tf.argmax(ypred, axis=1)
@@ -628,7 +629,7 @@ def print_info():
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
-    root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-before-pruning"))
+    root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet5-before-pruning"))
 
     # DUMMY VARIABLE INITIALIZATION : OTHERWISE THE WEIGHTS ARE NOT RESTORED
     ypred = tf.nn.softmax(net(tf.constant(xtest)))
@@ -663,7 +664,7 @@ def print_info():
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
-    root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-after-pruning"))
+    root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet5-after-pruning"))
 
     # DUMMY VARIABLE INITIALIZATION : OTHERWISE THE WEIGHTS ARE NOT RESTORED
     ypred = tf.nn.softmax(net(tf.constant(xtest)))

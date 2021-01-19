@@ -187,7 +187,7 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
         root = tf.train.Checkpoint(
             optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
         )
-        root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-before-pruning"))
+        root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet300-before-pruning"))
         ypred = tf.nn.softmax(net(tf.constant(xtest)))
         ypred = tf.argmax(ypred, axis=1)
 
@@ -299,7 +299,7 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
                 )
                 root.save("checkpoint-lenet300-before-pruning/ckpt")
-                root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-before-pruning"))
+                root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet300-before-pruning"))
 
             if i == total_train_epoch - 1:
                 root = tf.train.Checkpoint(
@@ -357,7 +357,7 @@ def quantize(cdfs=None, bits=5, mode="linear"):
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
-    root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-after-pruning"))
+    root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet300-after-pruning"))
 
     ypred = tf.nn.softmax(net(tf.constant(xtest)))
     ypred = tf.argmax(ypred, axis=1)
@@ -455,7 +455,7 @@ def print_info():
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
-    root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-before-pruning"))
+    root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet300-before-pruning"))
 
     # DUMMY VARIABLE INITIALIZATION : OTHERWISE THE WEIGHTS ARE NOT RESTORED
     ypred = tf.nn.softmax(net(tf.constant(xtest)))
@@ -486,7 +486,7 @@ def print_info():
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
-    root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-after-pruning"))
+    root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet300-after-pruning"))
 
     # DUMMY VARIABLE INITIALIZATION : OTHERWISE THE WEIGHTS ARE NOT RESTORED
     ypred = tf.nn.softmax(net(tf.constant(xtest)))
