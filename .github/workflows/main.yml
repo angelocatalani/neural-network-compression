@@ -24,10 +24,10 @@ jobs:
 
       - name: Configure Poetry
         run: |
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project false
-          poetry config cache-dir ~/.poetry
-          poetry config virtualenvs.path ~/.poetry/venv
+          python poetry config virtualenvs.create true
+          python poetry config virtualenvs.in-project false
+          python poetry config cache-dir ~/.poetry
+          python poetry config virtualenvs.path ~/.poetry/venv
       
       - name: Store Poetry cache
         uses: actions/cache@v2
