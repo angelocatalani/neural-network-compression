@@ -39,7 +39,9 @@ jobs:
      
       - name: Install dependecies
         if: steps.poetry-cache.outputs.cache-hit != 'true'
-        run: poetry install -vv
+        run: |
+        source $HOME/.poetry/env
+        poetry install -vv
 
       - name: Run Black
         run:  poetry run black --check .
