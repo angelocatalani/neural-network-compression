@@ -1,10 +1,9 @@
-import tensorflow.contrib.eager as tfe
+import tensorflow.python.eager as tfe
 import tensorflow as tf
 import numpy as np
-import utility
+import neural_network_compression.utility as utility
 import matplotlib.pyplot as plt
 
-tf.enable_eager_execution()
 mnist_folder = "data/mnist"
 layer1_size = 300
 layer2_size = 100
@@ -20,12 +19,10 @@ total_train_epoch = normal_train + prune_train + semi_prune_train
 
 def reset_seed():
     np.random.seed(0)
-    session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
-    from keras import backend as K
-
-    tf.set_random_seed(0)
-    sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
-    K.set_session(sess)
+    session_conf = tf.compat.v1.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+    tf.random.set_seed(0)
+    sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
+    tf.compat.v1.keras.backend.set_session(sess)
 
 
 reset_seed()
@@ -36,15 +33,16 @@ class LeNet300(tf.keras.Model):
 
     def __init__(self):
         super(LeNet300, self).__init__()
-        self.layer1 = tf.layers.Dense(layer1_size, activation=tf.nn.relu)
-        self.layer2 = tf.layers.Dense(layer2_size, activation=tf.nn.relu)
-        self.out = tf.layers.Dense(output_size)
+        self.layer1 = tf.keras.layers.Dense(layer1_size, activation=tf.nn.relu)
+        self.layer2 = tf.keras.layers.Dense(layer2_size, activation=tf.nn.relu)
+        self.out = tf.keras.layers.Dense(output_size)
 
     def call(self, x, **kwargs):
         return self.out(self.layer2(self.layer1(x)))
 
+LENET300 = LeNet300()
 
-def loss(net, x, y):
+def loss_func( x, y):
 
     """Loss function : softmax-cross-entropy with L2 regularization.
 
@@ -62,9 +60,11 @@ def loss(net, x, y):
     double
         the average error
     """
-
+    net = LENET300
     ypred = net(x)
-    l = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=ypred))
+    # not sure if it is correct
+    l = tf.reduce_mean(tf.losses.BinaryCrossentropy()(y, ypred))
+    #l = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=ypred))
     # Loss function with L2 Regularization with beta=0.01
     beta = 0.01
     w1 = net.layer1.get_weights()[0]
@@ -73,6 +73,14 @@ def loss(net, x, y):
     regularizers = tf.nn.l2_loss(w1) + tf.nn.l2_loss(w2) + tf.nn.l2_loss(w3)
     loss = tf.reduce_mean(l + beta * regularizers)
     return loss
+
+def get_grad(x,y):
+    with tf.GradientTape() as tape:
+        loss = loss_func(x, y)
+    return tape.gradient(loss, LENET300.trainable_variables)
+
+def apply_grad(opt,grads):
+    opt.apply_gradients(zip(grads,LENET300.trainable_variables))
 
 
 def print_zero_stat(net):
@@ -170,15 +178,14 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
     )
     ytest = tf.argmax(ytest, axis=1)
 
-    net = LeNet300()
+    net = LENET300
 
-    loss_grad = tfe.implicit_value_and_gradients(loss)
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
 
     if normal_train == 0:
 
         root = tf.train.Checkpoint(
-            optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+            optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
         )
         root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-before-pruning"))
         ypred = tf.nn.softmax(net(tf.constant(xtest)))
@@ -199,10 +206,11 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
         # semi prune : the previous zeros are left but no zeros will be added
         total_loss = 0
         if i >= normal_train + prune_train:
-            for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
-                current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                total_loss += current_loss.numpy()
-                opt.apply_gradients(grads)
+            for Xtrain_t, ytrain_t in train_data:
+                grads = get_grad(Xtrain_t, ytrain_t)
+                #total_loss += current_loss.numpy()
+                apply_grad(opt,grads)
+
                 w1 = net.layer1.get_weights()[0]
                 w2 = net.layer1.get_weights()[1]
                 w3 = net.layer2.get_weights()[0]
@@ -221,7 +229,7 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
 
         # prune
         if i >= normal_train and i < normal_train + prune_train:
-            for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
+            for Xtrain_t, ytrain_t in train_data:
                 # 1) get weight
                 w1 = net.layer1.get_weights()[0]
                 w2 = net.layer1.get_weights()[1]
@@ -244,10 +252,9 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                 net.out.set_weights([w5, w6])
 
                 # 4) compute and apply the gradient optimization on the pruned neural network
-                current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                total_loss += current_loss.numpy()
-
-                opt.apply_gradients(grads)
+                grads = get_grad(Xtrain_t, ytrain_t)
+                #total_loss += current_loss.numpy()
+                apply_grad(opt,grads)
 
                 # 5) get the updated weights and zeroed the previously pruned weights
                 w1 = net.layer1.get_weights()[0]
@@ -268,10 +275,10 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                 net.out.set_weights([w5, w6])
         # not prune
         if i < normal_train:
-            for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
-                current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                total_loss += current_loss.numpy()
-                opt.apply_gradients(grads)
+            for Xtrain_t, ytrain_t in train_data:
+                grads = get_grad(Xtrain_t, ytrain_t)
+                #total_loss += current_loss.numpy()
+                apply_grad(opt,grads)
 
         if True:
             print("\n--------- epoch: ", i, " --------------")
@@ -289,14 +296,14 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
 
             if i == normal_train - 1:
                 root = tf.train.Checkpoint(
-                    optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+                    optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
                 )
                 root.save("checkpoint-lenet300-before-pruning/ckpt")
                 root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-before-pruning"))
 
             if i == total_train_epoch - 1:
                 root = tf.train.Checkpoint(
-                    optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+                    optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
                 )
                 root.save("checkpoint-lenet300-after-pruning/ckpt")
 
@@ -346,9 +353,9 @@ def quantize(cdfs=None, bits=5, mode="linear"):
 
     # get the pruned NN
     net = LeNet300()
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-after-pruning"))
 
@@ -411,7 +418,7 @@ def quantize(cdfs=None, bits=5, mode="linear"):
     print(len(np.unique(w6)))
 
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.save("checkpoint-lenet300-after-quantization/ckpt")
 
@@ -444,9 +451,9 @@ def print_info():
 
     # get the  NN before prune
     net = LeNet300()
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-before-pruning"))
 
@@ -475,9 +482,9 @@ def print_info():
 
     # get the  NN after prune
     net = LeNet300()
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.restore(tf.train.latest_checkpoint("checkpoint-lenet300-after-pruning"))
 

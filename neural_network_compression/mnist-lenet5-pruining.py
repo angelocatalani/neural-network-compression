@@ -58,8 +58,9 @@ class LeNet5(tf.keras.Model):
         x = self.dropout(x, training=training)
         return self.logits(x)
 
+LENET5 = LeNet5()
 
-def loss(net, x, y):
+def loss_func( x, y):
 
     """Loss function : softmax-cross-entropy with L2 regularization.
 
@@ -78,12 +79,12 @@ def loss(net, x, y):
         the average error
     """
 
-    ypred = net(x)
+    ypred = LENET5(x)
     beta = 0.01
-    w1 = net.conv1.get_weights()[0]
-    w2 = net.conv2.get_weights()[0]
-    w3 = net.dense.get_weights()[0]
-    w4 = net.logits.get_weights()[0]
+    w1 = LENET5.conv1.get_weights()[0]
+    w2 = LENET5.conv2.get_weights()[0]
+    w3 = LENET5.dense.get_weights()[0]
+    w4 = LENET5.logits.get_weights()[0]
 
     # not sure if it is correct
     l = tf.reduce_mean(tf.losses.BinaryCrossentropy()(y, ypred))
@@ -93,6 +94,14 @@ def loss(net, x, y):
     loss_fin = tf.reduce_mean(l + beta * regularizers)
     return loss_fin
 
+
+def get_grad(x,y):
+    with tf.GradientTape() as tape:
+        loss = loss_func(x, y)
+    return tape.gradient(loss, LENET5.trainable_variables)
+
+def apply_grad(opt,grads):
+    opt.apply_gradients(zip(grads,LENET5.trainable_variables))
 
 def print_zero_stat(net):
 
@@ -110,10 +119,10 @@ def print_zero_stat(net):
         with respect the total weights in that layer
     """
 
-    [l1, l1_b] = net.conv1.get_weights()
-    [l2, l2_b] = net.conv2.get_weights()
-    [d, d_b] = net.dense.get_weights()
-    [l, l_b] = net.logits.get_weights()
+    [l1, l1_b] = LENET5.conv1.get_weights()
+    [l2, l2_b] = LENET5.conv2.get_weights()
+    [d, d_b] = LENET5.dense.get_weights()
+    [l, l_b] = LENET5.logits.get_weights()
 
     print(
         "Conv1 zeros:",
@@ -199,9 +208,7 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
     [(xtrain, ytrain), (xval, yval), (xtest, ytest)] = utility.read_mnist(
         mnist_folder, flatten=True, num_train=-1
     )
-    net = LeNet5()
-    loss_grad = tfe.implicit_value_and_gradients(loss)
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
 
     train_data = (
         tf.data.Dataset.from_tensor_slices((xtrain, ytrain))
@@ -215,10 +222,10 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
     if normal_train == 0:
 
         root = tf.train.Checkpoint(
-            optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+            optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
         )
         root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-before-pruning"))
-        ypred = tf.nn.softmax(net(tf.constant(xtest)))
+        ypred = tf.nn.softmax(LENET5(tf.constant(xtest)))
         ypred = tf.argmax(ypred, axis=1)
 
         tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
@@ -231,23 +238,23 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
         total_loss = 0
         if i >= normal_train + prune_train:
 
-            for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
+            for Xtrain_t, ytrain_t in train_data:
                 Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
-                current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                total_loss += current_loss.numpy()
-                opt.apply_gradients(grads)
+                grads = get_grad(Xtrain_t, ytrain_t)
+                #total_loss += current_loss.numpy()
+                apply_grad(opt,grads)
 
-                w1 = net.conv1.get_weights()[0]
-                w2 = net.conv1.get_weights()[1]
+                w1 = LENET5.conv1.get_weights()[0]
+                w2 = LENET5.conv1.get_weights()[1]
 
-                w3 = net.conv2.get_weights()[0]
-                w4 = net.conv2.get_weights()[1]
+                w3 = LENET5.conv2.get_weights()[0]
+                w4 = LENET5.conv2.get_weights()[1]
 
-                w5 = net.dense.get_weights()[0]
-                w6 = net.dense.get_weights()[1]
+                w5 = LENET5.dense.get_weights()[0]
+                w6 = LENET5.dense.get_weights()[1]
 
-                w7 = net.logits.get_weights()[0]
-                w8 = net.logits.get_weights()[1]
+                w7 = LENET5.logits.get_weights()[0]
+                w8 = LENET5.logits.get_weights()[1]
 
                 w1[zero_idx1] = 0
                 w2[zero_idx2] = 0
@@ -258,30 +265,30 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                 w7[zero_idx7] = 0
                 w8[zero_idx8] = 0
 
-                net.conv1.set_weights([w1, w2])
-                net.conv2.set_weights([w3, w4])
-                net.dense.set_weights([w5, w6])
-                net.logits.set_weights([w7, w8])
+                LENET5.conv1.set_weights([w1, w2])
+                LENET5.conv2.set_weights([w3, w4])
+                LENET5.dense.set_weights([w5, w6])
+                LENET5.logits.set_weights([w7, w8])
 
         # prune
         if i >= normal_train and i < normal_train + prune_train:
             # prune only conv layer and block zero weigth
             if i <= normal_train + (prune_train) / 2:
-                for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
+                for Xtrain_t, ytrain_t in train_data:
                     Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
 
                     # 1) get weight
-                    w1 = net.conv1.get_weights()[0]
-                    w2 = net.conv1.get_weights()[1]
+                    w1 = LENET5.conv1.get_weights()[0]
+                    w2 = LENET5.conv1.get_weights()[1]
 
-                    w3 = net.conv2.get_weights()[0]
-                    w4 = net.conv2.get_weights()[1]
+                    w3 = LENET5.conv2.get_weights()[0]
+                    w4 = LENET5.conv2.get_weights()[1]
 
-                    w5 = net.dense.get_weights()[0]
-                    w6 = net.dense.get_weights()[1]
+                    w5 = LENET5.dense.get_weights()[0]
+                    w6 = LENET5.dense.get_weights()[1]
 
-                    w7 = net.logits.get_weights()[0]
-                    w8 = net.logits.get_weights()[1]
+                    w7 = LENET5.logits.get_weights()[0]
+                    w8 = LENET5.logits.get_weights()[1]
 
                     # 2) side effect on the weights under threshold values and get pruned indexes
 
@@ -305,29 +312,29 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     zero_idx8 = w8 == 0
 
                     # 3) set the neural network pruned weights
-                    net.conv1.set_weights([w1, w2])
-                    net.conv2.set_weights([w3, w4])
-                    # net.dense.set_weights([w5, w6])
-                    # net.logits.set_weights([w7, w8])
+                    LENET5.conv1.set_weights([w1, w2])
+                    LENET5.conv2.set_weights([w3, w4])
+                    # LENET5.dense.set_weights([w5, w6])
+                    # LENET5.logits.set_weights([w7, w8])
 
                     # 4) compute and apply the gradient optimization on the pruned neural network
-                    current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                    total_loss += current_loss.numpy()
+                    grads = get_grad(Xtrain_t, ytrain_t)
+                    #total_loss += current_loss.numpy()
 
-                    opt.apply_gradients(grads)
+                    apply_grad(opt,grads)
 
                     # 5) get the updated weights and zeroed the previously pruned weights
-                    w1 = net.conv1.get_weights()[0]
-                    w2 = net.conv1.get_weights()[1]
+                    w1 = LENET5.conv1.get_weights()[0]
+                    w2 = LENET5.conv1.get_weights()[1]
 
-                    w3 = net.conv2.get_weights()[0]
-                    w4 = net.conv2.get_weights()[1]
+                    w3 = LENET5.conv2.get_weights()[0]
+                    w4 = LENET5.conv2.get_weights()[1]
 
-                    w5 = net.dense.get_weights()[0]
-                    w6 = net.dense.get_weights()[1]
+                    w5 = LENET5.dense.get_weights()[0]
+                    w6 = LENET5.dense.get_weights()[1]
 
-                    w7 = net.logits.get_weights()[0]
-                    w8 = net.logits.get_weights()[1]
+                    w7 = LENET5.logits.get_weights()[0]
+                    w8 = LENET5.logits.get_weights()[1]
 
                     w1[zero_idx1] = 0
                     w2[zero_idx2] = 0
@@ -338,29 +345,29 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     w7[zero_idx7] = 0
                     w8[zero_idx8] = 0
 
-                    net.conv1.set_weights([w1, w2])
-                    net.conv2.set_weights([w3, w4])
-                    net.dense.set_weights([w5, w6])
-                    net.logits.set_weights([w7, w8])
+                    LENET5.conv1.set_weights([w1, w2])
+                    LENET5.conv2.set_weights([w3, w4])
+                    LENET5.dense.set_weights([w5, w6])
+                    LENET5.logits.set_weights([w7, w8])
 
             # prune only dense layer and block zero weigth
             else:
 
-                for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
+                for Xtrain_t, ytrain_t in train_data:
                     Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
 
                     # 1) get weight
-                    w1 = net.conv1.get_weights()[0]
-                    w2 = net.conv1.get_weights()[1]
+                    w1 = LENET5.conv1.get_weights()[0]
+                    w2 = LENET5.conv1.get_weights()[1]
 
-                    w3 = net.conv2.get_weights()[0]
-                    w4 = net.conv2.get_weights()[1]
+                    w3 = LENET5.conv2.get_weights()[0]
+                    w4 = LENET5.conv2.get_weights()[1]
 
-                    w5 = net.dense.get_weights()[0]
-                    w6 = net.dense.get_weights()[1]
+                    w5 = LENET5.dense.get_weights()[0]
+                    w6 = LENET5.dense.get_weights()[1]
 
-                    w7 = net.logits.get_weights()[0]
-                    w8 = net.logits.get_weights()[1]
+                    w7 = LENET5.logits.get_weights()[0]
+                    w8 = LENET5.logits.get_weights()[1]
 
                     # 2) side effect on the weights under threshold values and get pruned indexes
 
@@ -382,29 +389,30 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     )
 
                     # 3) set the neural network pruned weights
-                    # net.conv1.set_weights([w1, w2])
-                    # net.conv2.set_weights([w3, w4])
-                    net.dense.set_weights([w5, w6])
-                    net.logits.set_weights([w7, w8])
+                    # LENET5.conv1.set_weights([w1, w2])
+                    # LENET5.conv2.set_weights([w3, w4])
+                    LENET5.dense.set_weights([w5, w6])
+                    LENET5.logits.set_weights([w7, w8])
 
                     # 4) compute and apply the gradient optimization on the pruned neural network
-                    current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                    total_loss += current_loss.numpy()
+                    grads = get_grad(Xtrain_t, ytrain_t)
 
-                    opt.apply_gradients(grads)
+                    #total_loss += current_loss.numpy()
+
+                    apply_grad(opt,grads)
 
                     # 5) get the updated weights and zeroed the previously pruned weights
-                    w1 = net.conv1.get_weights()[0]
-                    w2 = net.conv1.get_weights()[1]
+                    w1 = LENET5.conv1.get_weights()[0]
+                    w2 = LENET5.conv1.get_weights()[1]
 
-                    w3 = net.conv2.get_weights()[0]
-                    w4 = net.conv2.get_weights()[1]
+                    w3 = LENET5.conv2.get_weights()[0]
+                    w4 = LENET5.conv2.get_weights()[1]
 
-                    w5 = net.dense.get_weights()[0]
-                    w6 = net.dense.get_weights()[1]
+                    w5 = LENET5.dense.get_weights()[0]
+                    w6 = LENET5.dense.get_weights()[1]
 
-                    w7 = net.logits.get_weights()[0]
-                    w8 = net.logits.get_weights()[1]
+                    w7 = LENET5.logits.get_weights()[0]
+                    w8 = LENET5.logits.get_weights()[1]
 
                     w1[zero_idx1] = 0
                     w2[zero_idx2] = 0
@@ -415,24 +423,24 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     w7[zero_idx7] = 0
                     w8[zero_idx8] = 0
 
-                    net.conv1.set_weights([w1, w2])
-                    net.conv2.set_weights([w3, w4])
-                    net.dense.set_weights([w5, w6])
-                    net.logits.set_weights([w7, w8])
+                    LENET5.conv1.set_weights([w1, w2])
+                    LENET5.conv2.set_weights([w3, w4])
+                    LENET5.dense.set_weights([w5, w6])
+                    LENET5.logits.set_weights([w7, w8])
         # not prune
         if i < normal_train:
-            for Xtrain_t, ytrain_t in tfe.Iterator(train_data):
+            for Xtrain_t, ytrain_t in train_data:
 
                 Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
-                current_loss, grads = loss_grad(net, Xtrain_t, ytrain_t)
-                total_loss += current_loss.numpy()
-                opt.apply_gradients(grads)
+                grads = get_grad( Xtrain_t, ytrain_t)
+                #total_loss += current_loss.numpy()
+                apply_grad(opt,grads)
 
         if True:
             print("\n--------- epoch: ", i, " --------------")
-            print_zero_stat(net)
+            print_zero_stat(LENET5)
             print("total loss in this epoch: ", total_loss)
-            ypred = tf.nn.softmax(net(tf.constant(xtest)))
+            ypred = tf.nn.softmax(LENET5(tf.constant(xtest)))
             ypred = tf.argmax(ypred, axis=1)
             tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
             acc = tf.reduce_mean(tmp).numpy()
@@ -442,17 +450,17 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
 
             if i == normal_train - 1:
                 root = tf.train.Checkpoint(
-                    optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+                    optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
                 )
                 root.save("checkpoint-lenet5-before-pruning/ckpt")
 
             if i == total_train_epoch - 1:
                 root = tf.train.Checkpoint(
-                    optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+                    optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
                 )
                 root.save("checkpoint-lenet5-after-pruning/ckpt")
 
-    return net, accuracy_values
+    return LENET5, accuracy_values
 
 
 """ Quantization with kmeans """
@@ -500,9 +508,9 @@ def quantize(bits=5, cdfs=None, mode="linear"):
 
     # get the pruned NN
     net = LeNet5()
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-after-pruning"))
 
@@ -513,17 +521,17 @@ def quantize(bits=5, cdfs=None, mode="linear"):
     print("\naccuracy before quantization: ", tf.reduce_mean(tmp).numpy())
 
     # get the weights
-    w1 = net.conv1.get_weights()[0]
-    w2 = net.conv1.get_weights()[1]
+    w1 = LENET5.conv1.get_weights()[0]
+    w2 = LENET5.conv1.get_weights()[1]
 
-    w3 = net.conv2.get_weights()[0]
-    w4 = net.conv2.get_weights()[1]
+    w3 = LENET5.conv2.get_weights()[0]
+    w4 = LENET5.conv2.get_weights()[1]
 
-    w5 = net.dense.get_weights()[0]
-    w6 = net.dense.get_weights()[1]
+    w5 = LENET5.dense.get_weights()[0]
+    w6 = LENET5.dense.get_weights()[1]
 
-    w7 = net.logits.get_weights()[0]
-    w8 = net.logits.get_weights()[1]
+    w7 = LENET5.logits.get_weights()[0]
+    w8 = LENET5.logits.get_weights()[1]
 
     # get the quantized weights
     new_weight1, _ = utility.get_quantized_weight(w1, bits=bits, mode=mode, cdfs=(cdfs[0], cdfs[1]))
@@ -542,10 +550,10 @@ def quantize(bits=5, cdfs=None, mode="linear"):
     )
 
     # set the new weights
-    net.conv1.set_weights([new_weight1, new_weight2])
-    net.conv2.set_weights([new_weight3, new_weight4])
-    net.dense.set_weights([new_weight5, new_weight6])
-    net.logits.set_weights([new_weight7, new_weight8])
+    LENET5.conv1.set_weights([new_weight1, new_weight2])
+    LENET5.conv2.set_weights([new_weight3, new_weight4])
+    LENET5.dense.set_weights([new_weight5, new_weight6])
+    LENET5.logits.set_weights([new_weight7, new_weight8])
 
     # print stats
 
@@ -557,17 +565,17 @@ def quantize(bits=5, cdfs=None, mode="linear"):
     print("\naccuracy after quantization: ", tf.reduce_mean(tmp).numpy())
 
     # get the weights
-    w1 = net.conv1.get_weights()[0]
-    w2 = net.conv1.get_weights()[1]
+    w1 = LENET5.conv1.get_weights()[0]
+    w2 = LENET5.conv1.get_weights()[1]
 
-    w3 = net.conv2.get_weights()[0]
-    w4 = net.conv2.get_weights()[1]
+    w3 = LENET5.conv2.get_weights()[0]
+    w4 = LENET5.conv2.get_weights()[1]
 
-    w5 = net.dense.get_weights()[0]
-    w6 = net.dense.get_weights()[1]
+    w5 = LENET5.dense.get_weights()[0]
+    w6 = LENET5.dense.get_weights()[1]
 
-    w7 = net.logits.get_weights()[0]
-    w8 = net.logits.get_weights()[1]
+    w7 = LENET5.logits.get_weights()[0]
+    w8 = LENET5.logits.get_weights()[1]
 
     print("\nunique values :\n")
     print(len(np.unique(w1)))
@@ -580,7 +588,7 @@ def quantize(bits=5, cdfs=None, mode="linear"):
     print(len(np.unique(w8)))
 
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.save("checkpoint-lenet5-after-quantization/ckpt")
 
@@ -616,9 +624,9 @@ def print_info():
 
     # get the  NN before prune
     net = LeNet5()
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-before-pruning"))
 
@@ -629,14 +637,14 @@ def print_info():
     tmp = tf.cast(tf.equal(ypred, ytest), tf.float32)
     # print('\nbefore pruning accuracy: ', tf.reduce_mean(tmp).numpy())
 
-    w1 = net.conv1.get_weights()[0]
-    w2 = net.conv1.get_weights()[1]
-    w3 = net.conv2.get_weights()[0]
-    w4 = net.conv2.get_weights()[1]
-    w5 = net.dense.get_weights()[0]
-    w6 = net.dense.get_weights()[1]
-    w7 = net.logits.get_weights()[0]
-    w8 = net.logits.get_weights()[1]
+    w1 = LENET5.conv1.get_weights()[0]
+    w2 = LENET5.conv1.get_weights()[1]
+    w3 = LENET5.conv2.get_weights()[0]
+    w4 = LENET5.conv2.get_weights()[1]
+    w5 = LENET5.dense.get_weights()[0]
+    w6 = LENET5.dense.get_weights()[1]
+    w7 = LENET5.logits.get_weights()[0]
+    w8 = LENET5.logits.get_weights()[1]
 
     utility.show_weight_distribution(w1, "lenet5_report/conv1-lenete5-weights.png")
     utility.show_weight_distribution(w2, "lenet5_report/conv1-lenete5-bias.png")
@@ -651,9 +659,9 @@ def print_info():
 
     # get the  NN after prune
     net = LeNet5()
-    opt = tf.train.AdamOptimizer(0.001)
+    opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
-        optimizer=opt, model=net, optimizer_step=tf.train.get_or_create_global_step()
+        optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
     )
     root.restore(tf.train.latest_checkpoint("checkpoint-lenet5-after-pruning"))
 
@@ -667,42 +675,42 @@ def print_info():
     # print('\n zero stat:')
     # print_zero_stat(net)
 
-    w1 = net.conv1.get_weights()[0]
+    w1 = LENET5.conv1.get_weights()[0]
     w1 = w1.flatten()
     (idx,) = np.nonzero(w1 == 0)
     w1 = np.delete(w1, idx, axis=0)
 
-    w2 = net.conv1.get_weights()[1]
+    w2 = LENET5.conv1.get_weights()[1]
     w2 = w2.flatten()
     (idx,) = np.nonzero(w2 == 0)
     w2 = np.delete(w2, idx, axis=0)
 
-    w3 = net.conv2.get_weights()[0]
+    w3 = LENET5.conv2.get_weights()[0]
     w3 = w3.flatten()
     (idx,) = np.nonzero(w3 == 0)
     w3 = np.delete(w3, idx, axis=0)
 
-    w4 = net.conv2.get_weights()[1]
+    w4 = LENET5.conv2.get_weights()[1]
     w4 = w4.flatten()
     (idx,) = np.nonzero(w4 == 0)
     w4 = np.delete(w4, idx, axis=0)
 
-    w5 = net.dense.get_weights()[0]
+    w5 = LENET5.dense.get_weights()[0]
     w5 = w5.flatten()
     (idx,) = np.nonzero(w5 == 0)
     w5 = np.delete(w5, idx, axis=0)
 
-    w6 = net.dense.get_weights()[1]
+    w6 = LENET5.dense.get_weights()[1]
     w6 = w6.flatten()
     (idx,) = np.nonzero(w6 == 0)
     w6 = np.delete(w6, idx, axis=0)
 
-    w7 = net.logits.get_weights()[0]
+    w7 = LENET5.logits.get_weights()[0]
     w7 = w7.flatten()
     (idx,) = np.nonzero(w7 == 0)
     w7 = np.delete(w7, idx, axis=0)
 
-    w8 = net.logits.get_weights()[1]
+    w8 = LENET5.logits.get_weights()[1]
     w8 = w8.flatten()
     (idx,) = np.nonzero(w8 == 0)
     w8 = np.delete(w8, idx, axis=0)
