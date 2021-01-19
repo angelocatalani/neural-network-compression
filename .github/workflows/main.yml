@@ -20,7 +20,7 @@ jobs:
           python-version: 3.8
 
       - name: Install Poetry
-        uses: dschep/install-poetry-action@v1.3
+        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
 
       - name: Configure Poetry
         run: |
@@ -47,8 +47,7 @@ jobs:
 
       - name: Run MyPy
         run: |
-          poetry run mypy --strict ./sales_taxes_problem
-          poetry run mypy --strict ./tests
-     
+          poetry run mypy --strict ./neural_network_compression
+
       - name: Run isort
         run: poetry run isort -c
