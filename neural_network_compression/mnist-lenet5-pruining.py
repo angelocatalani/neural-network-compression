@@ -1,10 +1,14 @@
 import tensorflow as tf
 import numpy as np
 import neural_network_compression.utility as utility
+from neural_network_compression.neural_networks import LeNet5
+
 
 def reset_seed():
     np.random.seed(0)
-    session_conf = tf.compat.v1.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+    session_conf = tf.compat.v1.ConfigProto(
+        intra_op_parallelism_threads=1, inter_op_parallelism_threads=1
+    )
     tf.random.set_seed(0)
     sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
     tf.compat.v1.keras.backend.set_session(sess)
@@ -22,44 +26,10 @@ dense_size = 256
 output_size = 10
 
 
-class LeNet5(tf.keras.Model):
-    """LeNet5 model"""
-
-    def __init__(self):
-        super(LeNet5, self).__init__()
-
-        # weight: (5,5,1,20)=500 + (20,)
-        self.conv1 = tf.keras.layers.Conv2D(
-            filters=filter1_size, kernel_size=[5, 5], padding="same", activation=tf.nn.relu
-        )
-        self.pool1 = tf.keras.layers.MaxPooling2D(pool_size=[2, 2], strides=2)
-
-        # weight: (5,5,20,50)=25000 + (50,)
-        self.conv2 = tf.keras.layers.Conv2D(
-            filters=filter2_size, kernel_size=[5, 5], padding="same", activation=tf.nn.relu
-        )
-        self.pool2 = tf.keras.layers.MaxPooling2D(pool_size=[2, 2], strides=2)
-
-        #  weight: (2450, 256)= 627200 + (256,)
-        self.dense = tf.keras.layers.Dense(dense_size, activation=tf.nn.relu)
-        self.dropout = tf.keras.layers.Dropout(0.2)
-
-        # weight: (256, 10) = 2560 + (10,)
-        self.logits = tf.keras.layers.Dense(units=output_size)
-
-    def call(self, x, **kwargs):
-        training = kwargs.get("training",True)
-        x = self.pool1(self.conv1(x))
-        x = self.pool2(self.conv2(x))
-        feature_dim = x.shape[1] * x.shape[2] * x.shape[3]
-        x = tf.reshape(x, (-1, feature_dim))
-        x = self.dense(x)
-        x = self.dropout(x, training=training)
-        return self.logits(x)
-
 LENET5 = LeNet5()
 
-def loss_func( x, y):
+
+def loss_func(x, y):
 
     """Loss function : softmax-cross-entropy with L2 regularization.
 
@@ -88,19 +58,21 @@ def loss_func( x, y):
     # not sure if it is correct
     l = tf.reduce_mean(tf.losses.BinaryCrossentropy()(y, ypred))
 
-    #l = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=ypred))
+    # l = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=ypred))
     regularizers = tf.nn.l2_loss(w1) + tf.nn.l2_loss(w2) + tf.nn.l2_loss(w3) + tf.nn.l2_loss(w4)
     loss_fin = tf.reduce_mean(l + beta * regularizers)
     return loss_fin
 
 
-def get_grad(x,y):
+def get_grad(x, y):
     with tf.GradientTape() as tape:
         loss = loss_func(x, y)
     return tape.gradient(loss, LENET5.trainable_variables)
 
-def apply_grad(opt,grads):
-    opt.apply_gradients(zip(grads,LENET5.trainable_variables))
+
+def apply_grad(opt, grads):
+    opt.apply_gradients(zip(grads, LENET5.trainable_variables))
+
 
 def print_zero_stat(net):
 
@@ -221,7 +193,9 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
     if normal_train == 0:
 
         root = tf.train.Checkpoint(
-            optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
+            optimizer=opt,
+            model=LENET5,
+            optimizer_step=tf.compat.v1.train.get_or_create_global_step(),
         )
         root.restore(tf.train.latest_checkpoint("checkpoints/checkpoint-lenet5-before-pruning"))
         ypred = tf.nn.softmax(LENET5(tf.constant(xtest)))
@@ -240,8 +214,8 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
             for Xtrain_t, ytrain_t in train_data:
                 Xtrain_t = tf.reshape(Xtrain_t, shape=[-1, input_width, input_height, 1])
                 grads = get_grad(Xtrain_t, ytrain_t)
-                #total_loss += current_loss.numpy()
-                apply_grad(opt,grads)
+                # total_loss += current_loss.numpy()
+                apply_grad(opt, grads)
 
                 w1 = LENET5.conv1.get_weights()[0]
                 w2 = LENET5.conv1.get_weights()[1]
@@ -318,9 +292,9 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
 
                     # 4) compute and apply the gradient optimization on the pruned neural network
                     grads = get_grad(Xtrain_t, ytrain_t)
-                    #total_loss += current_loss.numpy()
+                    # total_loss += current_loss.numpy()
 
-                    apply_grad(opt,grads)
+                    apply_grad(opt, grads)
 
                     # 5) get the updated weights and zeroed the previously pruned weights
                     w1 = LENET5.conv1.get_weights()[0]
@@ -396,9 +370,9 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
                     # 4) compute and apply the gradient optimization on the pruned neural network
                     grads = get_grad(Xtrain_t, ytrain_t)
 
-                    #total_loss += current_loss.numpy()
+                    # total_loss += current_loss.numpy()
 
-                    apply_grad(opt,grads)
+                    apply_grad(opt, grads)
 
                     # 5) get the updated weights and zeroed the previously pruned weights
                     w1 = LENET5.conv1.get_weights()[0]
@@ -431,7 +405,6 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
         if i < normal_train:
             normal_training(opt, train_data)
 
-
         print("\n--------- epoch: ", i, " --------------")
         print_zero_stat(LENET5)
         print("total loss in this epoch: ", total_loss)
@@ -445,13 +418,17 @@ def train_with_pruning(thresholds, std_smooth, normal_train, prune_train, semi_p
 
         if i == normal_train - 1:
             root = tf.train.Checkpoint(
-                optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
+                optimizer=opt,
+                model=LENET5,
+                optimizer_step=tf.compat.v1.train.get_or_create_global_step(),
             )
             root.save("checkpoint-lenet5-before-pruning/ckpt")
 
         if i == total_train_epoch - 1:
             root = tf.train.Checkpoint(
-                optimizer=opt, model=LENET5, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
+                optimizer=opt,
+                model=LENET5,
+                optimizer_step=tf.compat.v1.train.get_or_create_global_step(),
             )
             root.save("checkpoint-lenet5-after-pruning/ckpt")
 
@@ -467,6 +444,8 @@ def normal_training(opt, train_data):
 
 
 """ Quantization with kmeans """
+
+
 def quantize(bits=5, cdfs=None, mode="linear"):
 
     """Performs the quantization and weight sharing with kmeans.

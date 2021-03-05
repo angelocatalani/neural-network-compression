@@ -2,16 +2,16 @@
 name = "neural-network-compression"
 description = "Neural network compression"
 version = "1.0.0"
-authors = ["angelo"]
+authors = ["catalaniangelo"]
 
 [tool.poetry.dependencies]
-matplotlib = "3.3.3"
-numpy = "1.19.5"
+matplotlib = "~3.3.3"
+numpy = "~1.19.5"
 python = "^3.8"
-scipy = "1.6.0"
-scikit-learn = "0.24.0"
-tensorflow = "2.4.0"
-Keras = "2.4.3"
+scipy = "~1.6.0"
+scikit-learn = "~0.24.0"
+tensorflow = "~2.4.0"
+Keras = "~2.4.3"
 
 [tool.poetry.dev-dependencies]
 black = "19.10b0"

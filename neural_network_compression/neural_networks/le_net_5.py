@@ -3,16 +3,16 @@ from typing import Any, Dict
 import tensorflow as tf
 
 
-class LeNet_5(tf.keras.Model):
+class LeNet5(tf.keras.Model):
     """
-    LeNet_5 is a convolutional neural network structure proposed by Yann LeCun et al. in 1989 [1].
+    LeNet5 is a convolutional neural network structure proposed by Yann LeCun et al. in 1989 [1].
 
     [1]: `LeCun, Yann, Bottou, Leon, Bengio, Yoshua, and Haffner, Patrick.
     Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.`.
     """
 
     def __init__(self) -> None:
-        super(LeNet_5, self).__init__()
+        super(LeNet5, self).__init__()
 
         # weights: (5,5,1,20) = 500 + (20,)
         self.conv1 = tf.keras.layers.Conv2D(
@@ -42,3 +42,18 @@ class LeNet_5(tf.keras.Model):
         x = self.dense(x)
         x = self.dropout(x, training=training)
         return self.logits(x)
+
+    def get_config(self):
+        config = super().get_config().copy()
+        config.update(
+            {
+                "conv1": self.conv1,
+                "pool1": self.pool1,
+                "conv2": self.conv2,
+                "pool2": self.pool2,
+                "dense": self.dense,
+                "dropout": self.dropout,
+                "logits": self.logits,
+            }
+        )
+        return config
