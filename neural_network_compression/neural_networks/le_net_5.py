@@ -43,8 +43,8 @@ class LeNet5(tf.keras.Model):
         x = self.dropout(x, training=training)
         return self.logits(x)
 
-    def get_config(self):
-        config = super().get_config().copy()
+    def get_config(self) -> Dict[str, tf.keras.layers.Layer]:
+        config: Dict[str, tf.keras.layers.Layer] = super().get_config().copy()
         config.update(
             {
                 "conv1": self.conv1,

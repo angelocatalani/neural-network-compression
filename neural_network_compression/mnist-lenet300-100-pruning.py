@@ -4,6 +4,8 @@ import numpy as np
 import neural_network_compression.utility as utility
 import matplotlib.pyplot as plt
 
+from neural_network_compression.neural_networks import LeNet300100
+
 mnist_folder = "data/mnist"
 layer1_size = 300
 layer2_size = 100
@@ -30,7 +32,7 @@ def reset_seed():
 reset_seed()
 
 
-LENET300 = LeNet300()
+LENET300 = LeNet300100()
 
 
 def loss_func(x, y):
@@ -351,7 +353,7 @@ def quantize(cdfs=None, bits=5, mode="linear"):
     )
 
     # get the pruned NN
-    net = LeNet300()
+    net = LeNet300100()
     opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
@@ -449,7 +451,7 @@ def print_info():
     ytest = tf.argmax(ytest, axis=1)
 
     # get the  NN before prune
-    net = LeNet300()
+    net = LeNet300100()
     opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
@@ -480,7 +482,7 @@ def print_info():
     # after pruning
 
     # get the  NN after prune
-    net = LeNet300()
+    net = LeNet300100()
     opt = tf.keras.optimizers.Adam(0.001)
     root = tf.train.Checkpoint(
         optimizer=opt, model=net, optimizer_step=tf.compat.v1.train.get_or_create_global_step()
