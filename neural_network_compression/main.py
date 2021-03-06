@@ -1,7 +1,8 @@
+import matplotlib.pyplot as plt
+import tensorflow as tf
+
 from neural_network_compression import utility
 from neural_network_compression.le_net_300_100_trainer import LeNet300100Trainer
-import tensorflow as tf
-import matplotlib.pyplot as plt
 from neural_network_compression.trainer import LeNetDataset
 
 mnist_folder = "data/mnist"

@@ -1,5 +1,6 @@
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
+
 import neural_network_compression.utility as utility
 from neural_network_compression.neural_networks import LeNet5
 

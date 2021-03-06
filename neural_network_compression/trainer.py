@@ -1,15 +1,11 @@
-from typing import List, Tuple, Dict
+from abc import ABC, abstractmethod
+from typing import Dict, List, NamedTuple, Tuple
 
 import numpy
 import tensorflow as tf
-
-from abc import ABC, abstractmethod
-
 from tqdm import tqdm
 
 from neural_network_compression import utility
-
-from typing import NamedTuple
 
 
 class LeNetDataset(NamedTuple):

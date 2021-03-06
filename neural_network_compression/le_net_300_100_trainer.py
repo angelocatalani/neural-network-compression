@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict
+from typing import Dict, Tuple
 
 import tensorflow as tf
 

@@ -1,13 +1,15 @@
-import os
 import gzip
+import os
 import shutil
-import urllib
-import numpy as np
 import struct
+import urllib
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.interpolate import interp1d
 from sklearn import datasets, model_selection
 from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
-from scipy.interpolate import interp1d
+
 
 """
 Data Management Functions

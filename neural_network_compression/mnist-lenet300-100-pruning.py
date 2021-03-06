@@ -1,9 +1,7 @@
-import tensorflow.python.eager as tfe
-import tensorflow as tf
 import numpy as np
-import neural_network_compression.utility as utility
-import matplotlib.pyplot as plt
+import tensorflow as tf
 
+import neural_network_compression.utility as utility
 from neural_network_compression.neural_networks import LeNet300100
 
 mnist_folder = "data/mnist"
