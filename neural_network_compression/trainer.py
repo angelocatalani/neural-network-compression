@@ -133,7 +133,11 @@ class Trainer(ABC):
         return accuracies
 
     def pruned_train(
-        self, train_dataset: LeNetDataset, test_dataset: LeNetDataset, epochs: int
+        self,
+        train_dataset: LeNetDataset,
+        test_dataset: LeNetDataset,
+        epochs: int,
+        with_standard_deviation_smoothing: bool,
     ) -> List[float]:
         """
         Train the neural network while pruning the parameters.
@@ -149,14 +153,14 @@ class Trainer(ABC):
         )
         for _ in tqdm(range(epochs), desc="pruned train"):
             for x_batch, y_batch in train_dataset:
-                self.prune_parameters()
+                self.prune_parameters(with_standard_deviation_smoothing)
                 gradient = self.get_gradient(x_batch, y_batch)
                 self.apply_gradient(gradient)
                 self.reset_pruned_parameters()
             accuracies.append(self.get_accuracy(test_dataset))
         return accuracies
 
-    def prune_parameters(self) -> None:
+    def prune_parameters(self, with_standard_deviation_smoothing: bool) -> None:
         """
         Prune the neural network parameters.
         """
@@ -166,10 +170,10 @@ class Trainer(ABC):
         ) in self.layers_to_prune_with_threshold.items():
             (weights, biases) = layer_to_prune.get_weights()
             zero_weight_indexes = utility.prune_weigth(
-                weights, threshold=weigh_threshold, std_smooth=True
+                weights, threshold=weigh_threshold, std_smooth=with_standard_deviation_smoothing
             )
             zero_bias_indexes = utility.prune_weigth(
-                biases, threshold=bias_threshold, std_smooth=True
+                biases, threshold=bias_threshold, std_smooth=with_standard_deviation_smoothing
             )
             self.pruned_indexes_by_layer[layer_to_prune] = [zero_weight_indexes, zero_bias_indexes]
             layer_to_prune.set_weights([weights, biases])
