@@ -3,6 +3,7 @@ import os
 import shutil
 import struct
 import urllib
+from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -130,7 +131,7 @@ the pruning threshold is chosen as a quality parameter multiplied by the standar
 """
 
 
-def prune_weigth(original_weigth, threshold=0.25, std_smooth=True):
+def prune_weigth(original_weigth, threshold=0.25, std_smooth=True) -> List[int]:
     """It prunes the weights
 
 

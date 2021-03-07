@@ -189,7 +189,7 @@ class Trainer(ABC):
             zero_bias_indexes = utility.prune_weigth(
                 biases, threshold=bias_threshold, std_smooth=with_standard_deviation_smoothing
             )
-            self.pruned_indexes_by_layer[layer_to_prune] = [zero_weight_indexes, zero_bias_indexes]
+            self.pruned_indexes_by_layer[layer_to_prune] = (zero_weight_indexes, zero_bias_indexes)
             layer_to_prune.set_weights([weights, biases])
 
     def _reset_pruned_parameters(self) -> None:
