@@ -1,0 +1,18 @@
+layer: dense1
+zeroed weights: 156917
+total weights: 235200
+zeroed biases: 37
+total weights: 300
+
+layer: dense2
+zeroed weights: 18999
+total weights: 30000
+zeroed biases: 11
+total weights: 100
+
+layer: out
+zeroed weights: 319
+total weights: 1000
+zeroed biases: 0
+total weights: 10
+

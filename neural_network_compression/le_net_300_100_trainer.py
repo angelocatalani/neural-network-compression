@@ -2,8 +2,8 @@ from typing import Dict, Tuple
 
 import tensorflow as tf
 
+from neural_network_compression.common.trainer import Trainer
 from neural_network_compression.neural_networks import LeNet300100
-from neural_network_compression.trainer import Trainer
 
 
 class LeNet300100Trainer(Trainer):
@@ -11,28 +11,26 @@ class LeNet300100Trainer(Trainer):
     The trainer for the LeNet300100 neural network.
     """
 
+    @property
+    def model_name(self) -> str:
+        return "LeNet300100"
+
     neural_network = LeNet300100()
     optimizer = tf.keras.optimizers.Adam(0.001)
 
     @property
-    def input_width(self) -> int:
-        return 28
-
-    @property
-    def input_height(self) -> int:
-        return 28
-
-    @property
-    def layers_to_prune_with_threshold(self) -> Dict[tf.keras.layers.Layer, Tuple[float, float]]:
+    def _layers_to_prune_with_threshold(self) -> Dict[tf.keras.layers.Layer, Tuple[float, float]]:
         return {
             self.neural_network.dense1: (1, 0.1),
             self.neural_network.dense2: (1, 0.1),
-            self.neural_network.out: (0.5, 1),
+            self.neural_network.out: (0.5, 0),
         }
 
-    def get_error(self, input_data: tf.Tensor, expected_output: tf.TensorArraySpec) -> tf.Tensor:
-        predictions = self.neural_network(input_data)
-        cross_entropy = tf.reduce_mean(tf.losses.BinaryCrossentropy()(expected_output, predictions))
+    def _get_error(self, input_data: tf.Tensor, expected_output: tf.TensorArraySpec) -> tf.Tensor:
+        logits_predictions = self.neural_network(input_data)
+        cross_entropy = tf.reduce_mean(
+            tf.losses.BinaryCrossentropy(from_logits=True)(expected_output, logits_predictions)
+        )
 
         w1 = self.neural_network.dense1.get_weights()[0]
         w2 = self.neural_network.dense2.get_weights()[0]

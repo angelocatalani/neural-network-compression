@@ -27,12 +27,8 @@ class LeNet300100(tf.keras.Model):
         return self.out(self.dense2(self.dense1(x)))
 
     def get_config(self) -> Dict[str, Any]:
-        config: Dict[str, tf.keras.layers] = super().get_config().copy()
-        config.update(
-            {
-                "dense1": self.dense1,
-                "dense2": self.dense2,
-                "out": self.out,
-            }
-        )
-        return config
+        return {
+            "dense1": self.dense1,
+            "dense2": self.dense2,
+            "out": self.out,
+        }

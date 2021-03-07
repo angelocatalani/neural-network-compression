@@ -44,16 +44,12 @@ class LeNet5(tf.keras.Model):
         return self.logits(x)
 
     def get_config(self) -> Dict[str, Any]:
-        config: Dict[str, tf.keras.layers.Layer] = super().get_config().copy()
-        config.update(
-            {
-                "conv1": self.conv1,
-                "pool1": self.pool1,
-                "conv2": self.conv2,
-                "pool2": self.pool2,
-                "dense": self.dense,
-                "dropout": self.dropout,
-                "logits": self.logits,
-            }
-        )
-        return config
+        return {
+            "conv1": self.conv1,
+            "pool1": self.pool1,
+            "conv2": self.conv2,
+            "pool2": self.pool2,
+            "dense": self.dense,
+            "dropout": self.dropout,
+            "logits": self.logits,
+        }
