@@ -1,4 +1,4 @@
-name: Linters and Tests
+name: Style check
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ staging, master ]
 
 jobs:
-  black-and-mypy:
-    runs-on: macos-10.15
+  style-checks:
+    runs-on:  macos-10.15
 
     steps:
       - name: Checkout repository
@@ -20,9 +20,10 @@ jobs:
           python-version: 3.8
 
       - name: Install Poetry
+        uses: dschep/install-poetry-action@v1.3
+
+      - name: Configure Poetry
         run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-          source $HOME/.poetry/env
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project false
           poetry config cache-dir ~/.poetry
@@ -39,16 +40,14 @@ jobs:
 
       - name: Install dependecies
         if: steps.poetry-cache.outputs.cache-hit != 'true'
-        run: |
-        source $HOME/.poetry/env
-        poetry install -vv
+        run: poetry install --dev-only
 
       - name: Run Black
-        run: poetry run black --check .
+        run:  poetry run black --check .
 
       - name: Run MyPy
         run: |
           poetry run mypy --strict ./neural_network_compression
-
+      
       - name: Run isort
         run: poetry run isort -c
