@@ -8,14 +8,14 @@ on:
 
 jobs:
   style-checks:
-    runs-on:  macos-10.15
+    runs-on:  Ubuntu-20.04
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Install Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
@@ -24,10 +24,10 @@ jobs:
 
       - name: Configure Poetry
         run: |
+          echo "~/.poetry/venv" >> $GITHUB_PATH
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project false
           poetry config cache-dir ~/.poetry
-          poetry config virtualenvs.path ~/.poetry/venv
 
       - name: Store Poetry cache
         uses: actions/cache@v2
@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependecies
         if: steps.poetry-cache.outputs.cache-hit != 'true'
-        run: poetry install --dev-only
+        run: poetry install -vv
 
       - name: Run Black
         run:  poetry run black --check .
