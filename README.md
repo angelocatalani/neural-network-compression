@@ -38,7 +38,7 @@ The pruning phase consists of three steps :
 
 -  train the weights: re-train the neural network and repeat from step 2
 
-![prune-view](resources/lat/prune-view.png)
+![prune-view](papers/lat/prune-view.png)
 
 
 
@@ -57,7 +57,7 @@ For my experiments, I used the `L2 regularization` .
 The threshold value for pruning, is obtained as a quality parameter multiplied by the standard deviation of the layer's weights.
  This choice is justified by the fact that as it is the case of my experiments, the weights of a dense/convolutional layers are distributed as a gaussian of zero mean, so that the weights in the range of the positive and negative standard deviation are the `68%` of the total.
 
-![weigth distribution for a dense layer of Lenet300100 before pruning](resources/lat/weigth-dis.png)
+![weigth distribution for a dense layer of Lenet300100 before pruning](papers/lat/weigth-dis.png)
 
 ### Quantization
 
@@ -78,9 +78,9 @@ There are 3 ways to initialize centroids:
 
 To fully differentiate the initialization methods, it is important to note the weights of a single layer are distributed as a bimodal distribution after the pruning.
 
- ![weights after pruning for a dense layer of Lenet300100](resources/lat/weights-after-pruning.png)
+ ![weights after pruning for a dense layer of Lenet300100](papers/lat/weights-after-pruning.png)
 
-![Cumulative weight distribution for a dense layer of Lenet300100](resources/lat/cdf.png)
+![Cumulative weight distribution for a dense layer of Lenet300100](papers/lat/cdf.png)
 
 
 
