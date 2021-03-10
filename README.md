@@ -94,7 +94,7 @@ This means that:
 
 ### Experiments
 
-The `main.py` contains some experiments with either `LeNet300100` , multiple threshold values and different `k-means` initialisation mode.
+The `main.py` contains some experiments with `LeNet300100` , multiple threshold values and different `k-means` initialisation mode.
 
 TODO: add experiments with `LeNet5`
 
