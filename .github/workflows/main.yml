@@ -25,10 +25,11 @@ jobs:
       - name: Configure Poetry
         run: |
           echo "~/.poetry/venv" >> $GITHUB_PATH
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project false
-          poetry config cache-dir ~/.poetry
-
+        env: 
+          POETRY_VIRTUALENVS_CREATE: true
+          POETRY_VIRTUALENVS_IN_PROJECT: false
+          POETRY_CACHE_DIR: ~/.poetry
+          
       - name: Store Poetry cache
         uses: actions/cache@v2
         id: poetry-cache
