@@ -115,7 +115,9 @@ Then, install dependencies:
 poetry install
 ```
 
-The `main.py` contains some experiments with `LeNet300100`, multiple threshold values and different `k-means` initialisation mode:
+The `main.py` contains some experiments with `LeNet300100`, multiple threshold values and different `k-means` initialisation mode.
+
+The following code generates the experiment results in the folder: ` neural_network_compression/2BitsDensityQuantization_report/`
 ```python
 if __name__ == "__main__":
     run_experiment_with_lenet300100(
