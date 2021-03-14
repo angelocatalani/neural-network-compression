@@ -234,12 +234,7 @@ def get_quantized_weight(layer_weight, bits=4, mode="linear", cdfs=None):
     else:
         raise Exception(" error mode not found")
 
-    kmeans = KMeans(
-        n_clusters=len(space),
-        init=space.reshape(-1, 1),
-        n_init=1,
-        algorithm="full",
-    )
+    kmeans = KMeans(n_clusters=len(space), init=space.reshape(-1, 1), n_init=1, algorithm="full",)
     kmeans.fit(layer_weight.reshape(-1, 1))
     ris = kmeans.cluster_centers_[kmeans.labels_].reshape(layer_weight.shape)
     return ris, kmeans

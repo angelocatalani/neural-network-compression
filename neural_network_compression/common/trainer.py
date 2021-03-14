@@ -178,9 +178,9 @@ class Trainer(ABC):
         """
         Prune the neural network parameters.
         """
-        for layer_to_prune, (
-            weigh_threshold,
-            bias_threshold,
+        for (
+            layer_to_prune,
+            (weigh_threshold, bias_threshold,),
         ) in self._layers_to_prune_with_threshold.items():
             (weights, biases) = layer_to_prune.get_weights()
             zero_weight_indexes = utility.prune_weigth(
@@ -196,9 +196,9 @@ class Trainer(ABC):
         """
         Set to zero the parameters previously pruned.
         """
-        for pruned_layer, (
-            zero_weight_indexes,
-            zero_bias_indexes,
+        for (
+            pruned_layer,
+            (zero_weight_indexes, zero_bias_indexes,),
         ) in self.pruned_indexes_by_layer.items():
             (weights, biases) = pruned_layer.get_weights()
             weights[zero_weight_indexes] = 0
