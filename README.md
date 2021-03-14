@@ -78,7 +78,7 @@ There are 3 ways to initialize centroids:
 
 To fully differentiate the initialization methods, it is important to note the weights of a single layer are distributed as a bimodal distribution after the pruning.
 
- ![weights after pruning for a dense layer of Lenet300100](papers/lat/weights-after-pruning.png)
+![weights after pruning for a dense layer of Lenet300100](papers/lat/weights-after-pruning.png)
 
 ![Cumulative weight distribution for a dense layer of Lenet300100](papers/lat/cdf.png)
 
@@ -94,7 +94,30 @@ This means that:
 
 ### Experiments
 
-The `main.py` contains some experiments with `LeNet300100` , multiple threshold values and different `k-means` initialisation mode.
+To run the experiments, first install and configure `poetry`:
+```shell
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+poetry config virtualenvs.in-project true
+```
+
+Then clone the repository:
+```shell script
+git clone git@github.com:angelocatalani/neural-network-compression.git
+```
+and change directory:
+```shell script
+cd neural-network-compression
+```
+ 
+Then, install dependencies:
+```shell script
+poetry install
+```
+
+The `main.py` contains some experiments with `LeNet300100` , multiple threshold values and different `k-means` initialisation mode:
+```shell script
+poetry run neural_network_compression/main.py
+```
 
 TODO: add experiments with `LeNet5`
 
